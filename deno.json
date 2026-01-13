@@ -1,0 +1,21 @@
+{
+  "tasks": {
+    "dev": "deno --watch -A src/index.ts",
+    "prod": "deno -A src/index.ts"
+  },
+  "imports": {
+    "$src/": "./src/"
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended", "jsr"],
+      "include": [
+        "camelCase",
+        "eqeqeq",
+        "explicit-function-return-type",
+        "no-const-reassign",
+        "no-eval"
+      ]
+    }
+  }
+}
