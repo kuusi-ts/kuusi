@@ -1,8 +1,7 @@
-import type { Route } from "$src/types.ts";
+import { Route } from "$src/types.ts";
 import { getRandomEmoji } from "$src/utils.ts";
 
-export const route: Route = {
-  url: new URLPattern({ pathname: "/todo" }),
+export const route = new Route({
   GET: (req) => {
     const responseBody = JSON.stringify({
       todo_url: req.url,
@@ -16,4 +15,4 @@ export const route: Route = {
       },
     });
   },
-};
+});

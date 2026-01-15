@@ -1,16 +1,19 @@
-function getAll(dir: string): string[] {
-  const paths: string[] = [];
-  for (const entry of Deno.readDirSync(dir)) {
-    if (entry.isFile) {
-      paths.push(entry.name);
-    } else if (entry.isDirectory) {
-      for (const subEntry of getAll(`${dir}/${entry.name}`)) {
-        paths.push(`${entry.name}/${subEntry}`);
-      }
-    }
-  }
+//import { getRoutes } from "./utils.ts";
+import { Route } from "./types.ts";
 
-  return paths;
-}
+const route = new Route({
+  GET: (req: Request) => {
+    const responseBody = JSON.stringify({
+      todo_url: req.url,
+    });
 
-console.log(getAll("./routes"));
+    return new Response(responseBody, {
+      status: 200,
+      headers: {
+        "content-type": "application/json; charset=utf-8",
+      },
+    });
+  },
+});
+
+console.log(route);

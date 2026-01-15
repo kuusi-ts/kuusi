@@ -1,28 +1,31 @@
-import { returnStatus } from "./utils.ts";
+import { routeGuard } from "./types.ts";
+import { getRoutes, returnStatus } from "./utils.ts";
 
-function getAll(dir: string): string[] {
-  const paths: string[] = [];
-  for (const entry of Deno.readDirSync(dir)) {
-    if (entry.isFile) {
-      paths.push(entry.name);
-    } else if (entry.isDirectory) {
-      for (const subEntry of getAll(`${dir}/${entry.name}`)) {
-        paths.push(`${entry.name}/${subEntry}`);
-      }
-    }
-  }
-
-  return paths;
-}
-
-const paths = getAll("./routes").map((path) =>
-  path[0] === "/" ? path : `/${path}`
-);
+const routes = getRoutes("./routes");
 
 async function handler(req: Request): Promise<Response> {
-  console.log(`here it is "/${req.url.split("/")[3] ?? ""}"`);
+  let parsedURL = "/" + req.url.split("/").slice(3).join("/");
+  if (parsedURL.endsWith("/")) parsedURL = parsedURL.slice(0, -1);
 
-  console.log(paths);
+  const match = routes.find((route) => route.exec(req.url));
+  if (!match) return returnStatus(404);
+
+  console.log(`path is "${parsedURL}"`);
+  console.log(match);
+
+  const imports = await import(
+    `../routes${match.pathname}/index.route.ts`
+  ) as object;
+
+  console.log(imports);
+
+  if (
+    !("route" in imports &&
+      typeof imports.route === typeof Object &&
+      routeGuard(imports.route as object))
+  ) {
+    return returnStatus(404);
+  }
 
   return returnStatus(200);
 }
