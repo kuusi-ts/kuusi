@@ -2,8 +2,6 @@ import { isObjKey, loadRoutes, returnStatus } from "./utils.ts";
 
 const routes = await loadRoutes("./routes");
 
-console.log(routes);
-
 async function handler(req: Request): Promise<Response> {
   const match = routes.find(([url]) => url.exec(req.url));
   if (!match) return returnStatus(404);

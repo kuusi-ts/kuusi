@@ -25,14 +25,12 @@ export async function loadRoutes(dir: string): Promise<[URLPattern, Route][]> {
       throw new Error(`routes/${path} does not provide a valid route export`);
     }
 
-    let pathname = path;
+    let pathname = "/" + path;
     if (path.split("/").at(-1) === "index.route.ts") {
       pathname = pathname.slice(0, -15);
     } else if (path.endsWith(".route.ts")) {
       pathname = pathname.slice(0, -9);
     }
-
-    if (pathname[0] !== "/") pathname = "/" + pathname;
 
     routes.push([
       new URLPattern({
