@@ -16,4 +16,4 @@ if (existsSync(".env.template")) {
   }
 }
 
-export default Deno.env.toObject();
+export default env;
