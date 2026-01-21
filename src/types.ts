@@ -1,4 +1,4 @@
-type RouteMethod = (
+export type RouteMethod = (
   req: Request,
   patternResult: URLPatternResult,
 ) => Promise<Response> | Response;

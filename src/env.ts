@@ -2,6 +2,10 @@ import { load } from "@std/dotenv";
 import { existsSync } from "@std/fs";
 
 const env = Deno.env.toObject();
+const dotenv = await load({
+  export: true,
+  envPath: ".env",
+});
 
 if (existsSync(".env.template")) {
   const templateEnv = await load({
@@ -10,10 +14,10 @@ if (existsSync(".env.template")) {
   });
 
   for (const key of Object.keys(templateEnv)) {
-    if (!env[key]) {
+    if (!dotenv[key]) {
       throw new Error(`\x1b[34mMissing .env variable ${key}\x1b[0m`);
     }
   }
 }
 
-export default env;
+export { dotenv, env };

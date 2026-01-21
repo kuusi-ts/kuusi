@@ -5,8 +5,8 @@
   },
   "imports": {
     "$src/": "./src/",
-    "kuusi/env": "./src/env.ts",
     "$routes/": "./routes/",
+    "kuusi/env": "./src/env.ts",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.6",
     "@std/fs": "jsr:@std/fs@^1.0.21",
     "@std/path": "jsr:@std/path@^1.1.4"
@@ -15,10 +15,10 @@
     "rules": {
       "tags": ["recommended", "jsr"],
       "include": [
-        "camelCase",
+        "camelcase",
         "eqeqeq",
         "explicit-function-return-type",
-        "no-const-reassign",
+        "no-const-assign",
         "no-eval"
       ]
     }

@@ -1,6 +1,6 @@
 import { Route } from "$src/types.ts";
 import { getRandomEmoji } from "$src/utils.ts";
-import env from "kuusi/env";
+import { env } from "kuusi/env";
 
 export const route = new Route({
   GET: (req, _) => {
