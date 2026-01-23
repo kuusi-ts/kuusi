@@ -1,5 +1,5 @@
-import { Route } from "$src/types.ts";
 import { getRandomEmoji } from "$src/utils.ts";
+import { Route } from "kuusi/types";
 
 export const route = new Route({
   GET: (req) => {

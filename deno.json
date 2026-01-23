@@ -4,9 +4,11 @@
     "prod": "deno -A src/index.ts"
   },
   "imports": {
-    "$src/": "./src/",
+    "kuusi": "./kuusi/index.ts",
+    "kuusi/env": "./kuusi/env.ts",
+    "kuusi/types": "./kuusi/types.ts",
     "$routes/": "./routes/",
-    "kuusi/env": "./src/env.ts",
+    "$src/": "./src/",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.6",
     "@std/fs": "jsr:@std/fs@^1.0.21",
     "@std/path": "jsr:@std/path@^1.1.4"

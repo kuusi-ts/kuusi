@@ -20,3 +20,9 @@ export class Route implements RouteMethods {
     Object.assign(this, obj);
   }
 }
+
+export type KuusiConfig = {
+  routeDir?: string;
+  envPath?: string;
+  envTemplatePath?: string;
+};
