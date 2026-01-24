@@ -50,7 +50,6 @@ for (const path of paths) {
  * A simple router that uses file system-based routing on the specified routes directory.
  *
  * @param req The request that needs to be routed.
- *
  * @returns A response from the route if a match was found. If there was no match, the response is a 404. If there was a match, but the endpoint did not support the HTTP verb of the request, the response is 405.
  */
 export async function kuusi(req: Request): Promise<Response> {
