@@ -17,7 +17,7 @@
 
 import { walkSync } from "@std/fs";
 import { relative } from "@std/path";
-import { kuusiConfig } from "./config.ts";
+//import { kuusiConfig } from "./config.ts";
 import { Route } from "./types.ts";
 import { isObjKey, unwrap } from "./utils.ts";
 
@@ -26,20 +26,16 @@ export * from "./types.ts";
 export * from "./config.ts";
 
 const paths = Array.from(
-  walkSync(kuusiConfig.routesPath, { includeDirs: false }),
-  ({ path }) => relative(kuusiConfig.routesPath, path),
+  walkSync("routes", { includeDirs: false }),
+  ({ path }) => relative("routes", path),
 );
 
 const routes: [URLPattern, Route][] = [];
 
-async function dynImport(path: string): object {
-  return await import(path) as object;
-}
-
 for (const path of paths) {
   if (!path.endsWith(".route.ts")) continue;
 
-  const imports = await import(kuusiConfig.routesPath + "/" + path) as object;
+  const imports = await import(`routes/${path}`) as object;
 
   if (!("route" in imports)) {
     throw new Error(`routes/${path} does not provide a route export`);
