@@ -17,14 +17,15 @@
 
 import { walkSync } from "@std/fs";
 import { relative } from "@std/path";
-import { config } from "../../kuusiApp/kuusi.config.ts";
+import { kuusiConfig } from "./config.ts";
 import { Route } from "./types.ts";
 import { isObjKey, unwrap } from "./utils.ts";
 
 export * from "./env.ts";
 export * from "./types.ts";
+export * from "./config.ts";
 
-const routeDir = config.routeDir ?? "routes";
+const routeDir = kuusiConfig.routesPath ?? "routes";
 
 const paths = Array.from(
   walkSync(routeDir, { includeDirs: false }),
@@ -48,17 +49,18 @@ for (const path of paths) {
     throw new Error(`routes/${path} does not provide a valid route export`);
   }
 
-  let pathname = ("/" + path).slice(
+  let parsedPath = "/" + path;
+  parsedPath = parsedPath.slice(
     0,
     path.split("/").at(-1) === "index.route.ts"
       ? -("index.route.ts".length + 1)
       : -".route.ts".length,
   );
 
-  if (pathname === "") pathname = "/";
+  if (parsedPath === "") parsedPath = "/";
 
   routes.push([
-    new URLPattern({ pathname: pathname }),
+    new URLPattern({ pathname: parsedPath }),
     imports.route,
   ]);
 }

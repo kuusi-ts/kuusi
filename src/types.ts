@@ -53,8 +53,8 @@ export class Route implements RouteMethods {
  * @property exportEnv Whether the dotenv variables should be exported to the env variables. In other words, whether the dotenv variables should also be included in the env variables. Defaults to false.
  */
 export type KuusiConfig = {
-  routePath?: string;
-  envPath?: string;
-  envTemplatePath?: string;
-  exportDotenv?: boolean;
+  routesPath: string;
+  envPath: string;
+  envTemplatePath: string;
+  exportDotenv: boolean;
 };
