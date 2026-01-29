@@ -2,6 +2,28 @@
  * kuusi: Se ei ole Oak-viittaus. A simple router / library / framework for Deno utilizing file-based routing.
  *
  * ```ts
+ * // routes/index.route.ts
+ * import { Route } from "@kuusi/kuusi";
+ *
+ * export const route = new Route({
+ *   GET: (_req, _) => {
+ *     return new Response(
+ *       JSON.stringify({
+ *         hallo: "daar",
+ *       }),
+ *       {
+ *         status: 200,
+ *         headers: {
+ *           "content-type": "application/json; charset=utf-8",
+ *         },
+ *       },
+ *     );
+ *   },
+ * });
+ * ```
+ *
+ * ```ts
+ * // src/index.ts
  * import { kuusi } from "@kuusi/kuusi";
  *
  * const routes = getKuusiRoutes();
