@@ -1,5 +1,5 @@
 /**
- * Kuusi: it a little whacky zany. A simple router / library / framework for Deno utilizing file-based routing.
+ * kuusi: Se ei ole Oak-viittaus. A simple router / library / framework for Deno utilizing file-based routing.
  *
  * ```ts
  * import { kuusi } from "@kuusi/kuusi";
@@ -30,12 +30,12 @@ export * from "./config.ts";
 /**
  * Function that collects all the routes from the routes directory.
  *
- * @returns The routes and their paths as {KuusiRoutes}
+ * @returns The routes and their paths as KuusiRoutes
  */
 export async function getKuusiRoutes(): Promise<KuusiRoutes> {
   const paths = Array.from(
-    walkSync("routes", { includeDirs: false }),
-    ({ path }) => relative("routes", path),
+    walkSync(kuusiConfig.routesPath, { includeDirs: false }),
+    ({ path }) => relative(kuusiConfig.routesPath, path),
   );
 
   const routes: KuusiRoutes = [];

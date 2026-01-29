@@ -29,25 +29,19 @@
 
 import { load } from "@std/dotenv";
 import { existsSync } from "@std/fs";
-import { kuusiConfig } from "./config.ts";
+import { join } from "@std/path";
 
 /** An object containing all environment variables, including those in a potential `.env` file. */
 const env: Record<string, string> = Deno.env.toObject();
 /** An object containing all environment variables in a `.env` file. */
-const dotenv: Record<string, string> = await load({
-  export: kuusiConfig.exportDotenv,
-  envPath: kuusiConfig.envPath,
-});
+const dotenv: Record<string, string> = await load();
 
-if (existsSync(kuusiConfig.envTemplatePath)) {
-  const templateEnv = await load({
-    export: true,
-    envPath: kuusiConfig.envTemplatePath,
-  });
+if (existsSync(join(Deno.cwd(), "template.env"))) {
+  const templateDotenv = await load({ export: false, envPath: "template.env" });
 
-  const notFound = Object.keys(templateEnv).find((key) => !(key in dotenv));
+  const notFound = Object.keys(templateDotenv).find((key) => !(key in dotenv));
 
-  if (!notFound) {
+  if (notFound) {
     throw new Error(
       `kuusi-missing-dotenv-key: Missing .env variable "${notFound}"`,
     );

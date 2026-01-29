@@ -55,13 +55,7 @@ export class Route implements RouteMethods {
  * Type holding the configgable options for kuusi.
  *
  * @property {routePath}: The path to the directory that holds the routes. Defaults to `routes/`.
- * @property {envPath}: The path to the dotenv file that should be loaded by kuusi. Defaults to `.env`.
- * @property {envTemplatePath}: The path to the template dotenv. All keys in the template dotenv should also be in the dotenv. If this is not the case, kuusi will throw an error.
- * @property {exportEnv}: Whether the dotenv variables should be exported to the env variables. In other words, whether the dotenv variables should also be included in the env variables. Defaults to false.
  */
 export type KuusiConfig = {
   routesPath: string;
-  envPath: string;
-  envTemplatePath: string;
-  exportDotenv: boolean;
 };

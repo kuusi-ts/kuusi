@@ -9,10 +9,8 @@ import type { KuusiConfig } from "./types.ts";
 
 // Default config
 const kuusiConfig: KuusiConfig = {
-  envPath: ".env",
-  envTemplatePath: ".env.template",
-  routesPath: "routes/",
-  exportDotenv: false,
+  // Windows moment
+  routesPath: Deno.build.os === "windows" ? "routes\\" : "routes/",
 };
 let configged: boolean = false;
 
@@ -32,14 +30,9 @@ export function setKuusiConfig(config: Partial<KuusiConfig>): void {
 
   for (const [key, value] of Object.entries(config)) {
     const keyofConfig = key as keyof KuusiConfig;
-    if (!config[keyofConfig]) continue;
+    if (config[keyofConfig] === undefined) continue;
 
-    // I dont even fucking know why this guard has to be this way, or even be here in the first place, but I hate it.
-    if (
-      kuusiConfig[keyofConfig] !== true &&
-      kuusiConfig[keyofConfig] !== false &&
-      value !== true && value !== false
-    ) (kuusiConfig[keyofConfig] as string) = value;
+    (kuusiConfig[keyofConfig] as string | boolean) = value;
   }
 
   if (config.routesPath && !config.routesPath.endsWith("/")) {
