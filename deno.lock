@@ -2,7 +2,7 @@
   "version": "5",
   "specifiers": {
     "jsr:@std/dotenv@~0.225.6": "0.225.6",
-    "jsr:@std/fs@^1.0.21": "1.0.22",
+    "jsr:@std/fs@^1.0.22": "1.0.22",
     "jsr:@std/internal@^1.0.12": "1.0.12",
     "jsr:@std/path@^1.1.4": "1.1.4"
   },
@@ -30,7 +30,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/dotenv@~0.225.6",
-      "jsr:@std/fs@^1.0.21",
+      "jsr:@std/fs@^1.0.22",
       "jsr:@std/path@^1.1.4"
     ]
   }

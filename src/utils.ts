@@ -12,3 +12,17 @@ export function unwrap<T>(thing: T | undefined | null): NonNullable<T> {
 
   return thing;
 }
+
+export function parsePath(path: string): string {
+  let parsedPath = "/" + path;
+  parsedPath = parsedPath.slice(
+    0,
+    path.split("/").at(-1) === "index.route.ts"
+      ? -("index.route.ts".length + 1)
+      : -".route.ts".length,
+  );
+
+  if (parsedPath === "") parsedPath = "/";
+
+  return parsedPath;
+}
