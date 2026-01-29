@@ -1,6 +1,6 @@
 {
   "name": "@kuusi/kuusi",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "exports": {
     ".": "./src/mod.ts",
     "./env": "./src/env.ts",
@@ -8,9 +8,8 @@
     "./config": "./src/config.ts"
   },
   "imports": {
-    "@sigmasd/jsrlab": "jsr:@sigmasd/jsrlab@^1.2.1",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.6",
-    "@std/fs": "jsr:@std/fs@^1.0.21",
+    "@std/fs": "jsr:@std/fs@^1.0.22",
     "@std/path": "jsr:@std/path@^1.1.4"
   },
   "lint": {
