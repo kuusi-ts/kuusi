@@ -37,7 +37,7 @@ export type RouteMethods = {
  * @method POST The method serving the POST method of this `Route`.
  * @method PUT The method serving the PUT method of this `Route`.
  * @method DELETE The method serving the DELETE method of this `Route`.
- * 
+ *
  * @constructor Puts all the assigned methods on the class.
  */
 export class Route implements RouteMethods {
@@ -54,7 +54,7 @@ export class Route implements RouteMethods {
 /**
  * Type holding the configgable options for kuusi.
  *
- * @property {routePath}: The path to the directory that holds the routes. Defaults to `routes/`.
+ * @property routePath: The path to the directory that holds the routes. Defaults to `routes/`.
  */
 export type KuusiConfig = {
   routesPath: string;

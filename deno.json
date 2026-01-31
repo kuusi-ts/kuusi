@@ -1,17 +1,11 @@
 {
-  "name": "@kuusi/kuusi",
-  "version": "0.2.1",
-  "exports": {
-    ".": "./src/mod.ts",
-    "./env": "./src/env.ts",
-    "./types": "./src/types.ts",
-    "./config": "./src/config.ts"
-  },
+  "nodeModulesDir": "auto",
   "imports": {
     "@std/dotenv": "jsr:@std/dotenv@^0.225.6",
     "@std/fs": "jsr:@std/fs@^1.0.22",
     "@std/path": "jsr:@std/path@^1.1.4"
   },
+  "workspace": ["./testing"],
   "lint": {
     "rules": {
       "tags": ["recommended", "jsr"],

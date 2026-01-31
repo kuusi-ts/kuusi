@@ -6,10 +6,10 @@
  * import { Route } from "@kuusi/kuusi";
  *
  * export const route = new Route({
- *   GET: (_req, _) => {
+ *   GET: (req, patternResult) => {
  *     return new Response(
  *       JSON.stringify({
- *         hallo: "daar",
+ *         message: "welcome to kuusi!",
  *       }),
  *       {
  *         status: 200,
