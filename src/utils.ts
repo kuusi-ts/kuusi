@@ -13,16 +13,10 @@ export function unwrap<T>(thing: T | undefined | null): NonNullable<T> {
   return thing;
 }
 
-export function parsePath(path: `${string}.route.ts`): `/${string}` {
-  let parsedPath = "/" + path;
-  parsedPath = parsedPath.slice(
+export const parsePath = (path: string) =>
+  ("/" + path).slice(
     0,
-    path.split("/").at(-1) === "index.route.ts"
-      ? -("index.route.ts".length + 1)
-      : -".route.ts".length,
+    path.split("/").at(-1) === "index.route.ts" ? -14 : -9,
   );
-
-  if (parsedPath === "") parsedPath = "/";
-
-  return parsedPath;
-}
+// 9 = ".route.ts".length
+// 14 = "index.route.ts".length;

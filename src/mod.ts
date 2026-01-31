@@ -41,13 +41,20 @@
 
 import { walkSync } from "@std/fs";
 import { join, relative, toFileUrl } from "@std/path";
-import { kuusiConfig } from "./config.ts";
+import { defaultKuusiConfig, kuusiConfigGuard } from "./config.ts";
 import { type KuusiRoutes, Route } from "./types.ts";
 import { isObjKey, parsePath, unwrap } from "./utils.ts";
 
+const configImport = await import(
+  join(Deno.cwd(), "kuusi.config.ts")
+) as object;
+
+export const kuusiConfig = "default" in configImport
+  ? kuusiConfigGuard(configImport.default as object)
+  : defaultKuusiConfig;
+
 export * from "./env.ts";
 export * from "./types.ts";
-export * from "./config.ts";
 
 /**
  * Function that collects all the routes from the routes directory.
@@ -78,7 +85,7 @@ export async function getKuusiRoutes(): Promise<KuusiRoutes> {
     }
 
     routes.push([
-      new URLPattern({ pathname: parsePath(path) }),
+      new URLPattern({ pathname: parsePath(path as string) }),
       imports.route,
     ]);
   }

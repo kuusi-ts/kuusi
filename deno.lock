@@ -1,12 +1,19 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@std/assert@^1.0.18": "1.0.18",
     "jsr:@std/dotenv@~0.225.6": "0.225.6",
     "jsr:@std/fs@^1.0.22": "1.0.22",
     "jsr:@std/internal@^1.0.12": "1.0.12",
     "jsr:@std/path@^1.1.4": "1.1.4"
   },
   "jsr": {
+    "@std/assert@1.0.18": {
+      "integrity": "270245e9c2c13b446286de475131dc688ca9abcd94fc5db41d43a219b34d1c78",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    },
     "@std/dotenv@0.225.6": {
       "integrity": "1d6f9db72f565bd26790fa034c26e45ecb260b5245417be76c2279e5734c421b"
     },
@@ -32,6 +39,21 @@
       "jsr:@std/dotenv@~0.225.6",
       "jsr:@std/fs@^1.0.22",
       "jsr:@std/path@^1.1.4"
-    ]
+    ],
+    "members": {
+      "src": {
+        "dependencies": [
+          "jsr:@std/assert@^1.0.18",
+          "jsr:@std/dotenv@~0.225.6",
+          "jsr:@std/fs@^1.0.22",
+          "jsr:@std/path@^1.1.4"
+        ]
+      },
+      "testing": {
+        "dependencies": [
+          "jsr:@kuusi/kuusi@~0.2.2"
+        ]
+      }
+    }
   }
 }

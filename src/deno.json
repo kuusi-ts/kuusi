@@ -4,10 +4,10 @@
   "exports": {
     ".": "./mod.ts",
     "./env": "./env.ts",
-    "./types": "./types.ts",
-    "./config": "./config.ts"
+    "./types": "./types.ts"
   },
   "imports": {
+    "@std/assert": "jsr:@std/assert@^1.0.18",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.6",
     "@std/fs": "jsr:@std/fs@^1.0.22",
     "@std/path": "jsr:@std/path@^1.1.4"

@@ -1,3 +1,9 @@
 {
-  "nodeModulesDir": "auto"
+  "tasks": {
+    "dev": "deno --allow-env --allow-read --allow-net --watch src/index.ts",
+    "dev-watch": "deno --allow-env --allow-read --allow-net --watch src/index.ts"
+  },
+  "imports": {
+    "@kuusi/kuusi": "jsr:@kuusi/kuusi@^0.2.2"
+  }
 }
