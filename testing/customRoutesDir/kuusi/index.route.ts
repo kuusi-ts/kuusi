@@ -5,6 +5,7 @@ export const route = new Route({
     return new Response(
       JSON.stringify({
         message: "Welcome to kuusi!",
+        url: req.url,
       }),
       {
         status: 200,

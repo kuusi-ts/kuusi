@@ -15,35 +15,34 @@ const kuusiConfig: KuusiConfig = {
   envPath: ".env",
   templateEnvPath: "template.env",
   exportDotenv: false,
+  warnAmbiguousRoutes: true,
 };
 
 const configImport = await import(
   join(Deno.cwd(), "kuusi.config.ts")
 ) as object;
 
-if (
-  "default" in configImport &&
-  typeof configImport.default === "object" &&
-  configImport.default
-) {
+const invalidKuusiConfig = new Error(
+  "invalid-kuusi-config: the exported kuusiConfig should be of type `Partial<KuusiConfig>`",
+);
+
+if ("default" in configImport && configImport.default) {
+  if (
+    typeof configImport.default !== "object" && configImport.default !== null
+  ) throw invalidKuusiConfig;
+
   const maybeValidConfig = configImport.default;
 
-  // Checks whether maybeValidConfig contains any illegal keys
   for (const [key, value] of Object.entries(maybeValidConfig)) {
-    if (!(key in kuusiConfig)) {
-      throw new Error(
-        `invalid-kuusi-config-key: the configuration of kuusi you have provided contains a field with key "${key}", which is not allowed.`,
-      );
-    }
+    if (!(key in kuusiConfig)) throw invalidKuusiConfig;
 
-    // Checks whether maybeValidConfig contains any illegal values
     if (typeof value !== typeof kuusiConfig[key as keyof KuusiConfig]) {
-      throw new Error(
-        `invalid-kuusi-config-value: the type of the field ${key} on the configuration of kuusi you have provided is incorrrect.`,
-      );
+      throw invalidKuusiConfig;
     }
 
-    (kuusiConfig[key as keyof KuusiConfig] as string | boolean) = value as string | boolean;
+    (kuusiConfig[key as keyof KuusiConfig] as string | boolean) = value as
+      | string
+      | boolean;
   }
 
   if (!existsSync(kuusiConfig.routesPath, { isDirectory: true })) {

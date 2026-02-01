@@ -1,6 +1,4 @@
-import { dotenv, getKuusiRoutes, kuusi } from "@kuusi/kuusi";
-
-console.log(dotenv);
+import { getKuusiRoutes, kuusi } from "@kuusi/kuusi";
 
 const routes = await getKuusiRoutes();
 

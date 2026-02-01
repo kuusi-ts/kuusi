@@ -43,7 +43,7 @@ import { walkSync } from "@std/fs";
 import { join, relative, toFileUrl } from "@std/path";
 import { kuusiConfig } from "./config.ts";
 import { type KuusiRoutes, Route } from "./types.ts";
-import { isObjKey, parsePath, unwrap } from "./utils.ts";
+import { getAmbiguousURLs, isObjKey, parsePath, unwrap } from "./utils.ts";
 
 export * from "./env.ts";
 export * from "./types.ts";
@@ -77,9 +77,17 @@ export async function getKuusiRoutes(): Promise<KuusiRoutes> {
     }
 
     routes.push([
-      new URLPattern({ pathname: parsePath(path as string) }),
+      new URLPattern({ pathname: parsePath(path as `${string}.route.ts`) }),
       imports.route,
     ]);
+  }
+
+  if (kuusiConfig.warnAmbiguousRoutes) {
+    for (const ambiguousURL of getAmbiguousURLs(routes)) {
+      console.warn(
+        `kuusi-ambiguous-url: "${ambiguousURL}" and "${ambiguousURL}/" are very similar. Consider renaming at least one of them.`,
+      );
+    }
   }
 
   return routes;

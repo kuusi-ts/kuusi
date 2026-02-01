@@ -11,5 +11,9 @@ A simple JavaScript / TypeScript framework for the backend using Deno.
 
 ## To do list
 
-- Make the final decision on the route parameters
-- Make it be able to read a `kuusi.config.ts` file
+- Sort the fields in `KuusiConfig` by theme, so for example all dotenv fields
+  are grouped in a `dotenv` object.
+- Implement websockets
+- Implement webhooks
+- ? Implement a standard way to handle databases
+- ? Implement other backend-related things

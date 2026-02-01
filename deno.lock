@@ -53,6 +53,11 @@
         "dependencies": [
           "jsr:@kuusi/kuusi@~0.2.2"
         ]
+      },
+      "tests": {
+        "dependencies": [
+          "jsr:@std/assert@^1.0.18"
+        ]
       }
     }
   }

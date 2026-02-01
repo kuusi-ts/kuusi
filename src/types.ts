@@ -57,10 +57,13 @@ export class Route implements RouteMethods {
  * @property routePath: The path to the directory that holds the routes. Defaults to `routes/`.
  * @property envPath: The path to the dotenv file that will be loaded. Defaults to `.env`.
  * @property templateEnvPath: The path to the template dotenv file that will be loaded. The template dotenv file contains all keys that the dotenv file must contain. Defaults to `template.env`.
+ * @property exportDotenv: whether the dotenv variables should also be included in the env variables. Defaults to `false`.
+ * @property warnAmbiguousRoutes: whether a warning should be shown when two url's only differ by a trailing forwardslash.
  */
 export type KuusiConfig = {
   routesPath: string;
   envPath: string;
   templateEnvPath: string;
   exportDotenv: boolean;
+  warnAmbiguousRoutes: boolean;
 };
