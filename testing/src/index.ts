@@ -1,8 +1,6 @@
-import { getKuusiRoutes, kuusi, setKuusiConfig } from "@kuusi/kuusi";
+import { dotenv, getKuusiRoutes, kuusi } from "@kuusi/kuusi";
 
-setKuusiConfig({
-  routesPath: "customRoutesDir",
-});
+console.log(dotenv);
 
 const routes = await getKuusiRoutes();
 

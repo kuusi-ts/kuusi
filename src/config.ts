@@ -5,24 +5,30 @@
  */
 
 import { existsSync } from "@std/fs/exists";
+import { join } from "@std/path/join";
 import type { KuusiConfig } from "./types.ts";
 
 // Default config
-export const defaultKuusiConfig: KuusiConfig = {
+const kuusiConfig: KuusiConfig = {
   // Windows moment
   routesPath: Deno.build.os === "windows" ? "routes\\" : "routes/",
   envPath: ".env",
   templateEnvPath: "template.env",
+  exportDotenv: false,
 };
 
-/**
- * Function that checks whether an object is a valid kuusiconfig.
- *
- * @param config An object whose properties will override the default configuration. If a config option is not specified, the default option will apply.
- */
-export function kuusiConfigGuard(maybeValidConfig: object): KuusiConfig {
-  const kuusiConfig = structuredClone(defaultKuusiConfig);
+const configImport = await import(
+  join(Deno.cwd(), "kuusi.config.ts")
+) as object;
 
+if (
+  "default" in configImport &&
+  typeof configImport.default === "object" &&
+  configImport.default
+) {
+  const maybeValidConfig = configImport.default;
+
+  // Checks whether maybeValidConfig contains any illegal keys
   for (const [key, value] of Object.entries(maybeValidConfig)) {
     if (!(key in kuusiConfig)) {
       throw new Error(
@@ -30,13 +36,14 @@ export function kuusiConfigGuard(maybeValidConfig: object): KuusiConfig {
       );
     }
 
+    // Checks whether maybeValidConfig contains any illegal values
     if (typeof value !== typeof kuusiConfig[key as keyof KuusiConfig]) {
       throw new Error(
         `invalid-kuusi-config-value: the type of the field ${key} on the configuration of kuusi you have provided is incorrrect.`,
       );
     }
 
-    kuusiConfig[key as keyof KuusiConfig] = value;
+    (kuusiConfig[key as keyof KuusiConfig] as string | boolean) = value as string | boolean;
   }
 
   if (!existsSync(kuusiConfig.routesPath, { isDirectory: true })) {
@@ -44,6 +51,6 @@ export function kuusiConfigGuard(maybeValidConfig: object): KuusiConfig {
       "kuusi-no-routes-directory: The routes directory does not exist.",
     );
   }
-
-  return kuusiConfig;
 }
+
+export { kuusiConfig };

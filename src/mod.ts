@@ -41,17 +41,9 @@
 
 import { walkSync } from "@std/fs";
 import { join, relative, toFileUrl } from "@std/path";
-import { defaultKuusiConfig, kuusiConfigGuard } from "./config.ts";
+import { kuusiConfig } from "./config.ts";
 import { type KuusiRoutes, Route } from "./types.ts";
 import { isObjKey, parsePath, unwrap } from "./utils.ts";
-
-const configImport = await import(
-  join(Deno.cwd(), "kuusi.config.ts")
-) as object;
-
-export const kuusiConfig = "default" in configImport
-  ? kuusiConfigGuard(configImport.default as object)
-  : defaultKuusiConfig;
 
 export * from "./env.ts";
 export * from "./types.ts";
@@ -73,7 +65,7 @@ export async function getKuusiRoutes(): Promise<KuusiRoutes> {
     if (!path.endsWith(".route.ts")) continue;
 
     const absolutePath =
-      toFileUrl(join(Deno.cwd(), kuusiConfig.routesPath + path)).href;
+      toFileUrl(join(Deno.cwd(), kuusiConfig.routesPath, path)).href;
     const imports = await import(absolutePath) as object;
 
     if (!("route" in imports)) {

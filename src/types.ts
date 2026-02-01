@@ -62,4 +62,5 @@ export type KuusiConfig = {
   routesPath: string;
   envPath: string;
   templateEnvPath: string;
+  exportDotenv: boolean;
 };
