@@ -7,7 +7,7 @@
 /**
  * Type of an array of tuples that hold the URLPattern and the Route of each Route.
  */
-export type KuusiRoutes = [URLPattern, Route][];
+export type KuusiRoute = [URLPattern, Route];
 
 /**
  * Type of a method that serves a HTTP method on a route.
@@ -61,9 +61,25 @@ export class Route implements RouteMethods {
  * @property warnAmbiguousRoutes: whether a warning should be shown when two url's only differ by a trailing forwardslash.
  */
 export type KuusiConfig = {
-  routesPath: string;
-  envPath: string;
-  templateEnvPath: string;
-  exportDotenv: boolean;
-  warnAmbiguousRoutes: boolean;
+  routes: {
+    path: string;
+    warnAmbiguousRoutes: boolean;
+  };
+  dotenv: {
+    path: string;
+    templatePath: string;
+    export: boolean;
+  };
+};
+
+export type SuperPartialKuusiConfig = {
+  routes?: {
+    path?: string;
+    warnAmbiguousRoutes?: boolean;
+  };
+  dotenv?: {
+    path?: string;
+    templatePath?: string;
+    export?: boolean;
+  };
 };

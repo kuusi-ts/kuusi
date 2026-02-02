@@ -1,6 +1,6 @@
-import { KuusiRoutes } from "@kuusi/kuusi";
+import type { KuusiRoute } from "@kuusi/kuusi";
 
-export const isObjKey = <T extends object>(
+export const isObjKey = <T extends NonNullable<object>>(
   key: string | number | symbol,
   obj: T,
 ): key is keyof T => key in obj;
@@ -15,7 +15,7 @@ export function unwrap<T>(thing: T | undefined | null): NonNullable<T> {
   return thing;
 }
 
-export const parsePath = (path: `${string}.route.ts`) =>
+export const parsePath = (path: string) =>
   "/" + path.slice(
     0,
     path.split("/").at(-1) === "index.route.ts" ? -14 : -9,
@@ -37,7 +37,7 @@ export const parsePath = (path: `${string}.route.ts`) =>
 export const getDuplicate = <T>(array: T[]) =>
   array.filter((item, index) => array.indexOf(item) !== index);
 
-export const getAmbiguousURLs = (routes: KuusiRoutes) =>
+export const getAmbiguousURLs = (routes: KuusiRoute[]) =>
   getDuplicate(
     routes.map(([url]) =>
       url.pathname.endsWith("/") ? url.pathname.slice(0, -1) : url.pathname

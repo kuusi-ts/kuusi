@@ -42,7 +42,7 @@
 import { walkSync } from "@std/fs";
 import { join, relative, toFileUrl } from "@std/path";
 import { kuusiConfig } from "./config.ts";
-import { type KuusiRoutes, Route } from "./types.ts";
+import { type KuusiRoute, Route } from "./types.ts";
 import { getAmbiguousURLs, isObjKey, parsePath, unwrap } from "./utils.ts";
 
 export * from "./env.ts";
@@ -53,19 +53,19 @@ export * from "./types.ts";
  *
  * @returns The routes and their paths as KuusiRoutes
  */
-export async function getKuusiRoutes(): Promise<KuusiRoutes> {
+export async function getKuusiRoutes(): Promise<KuusiRoute[]> {
   const paths = Array.from(
-    walkSync(kuusiConfig.routesPath, { includeDirs: false }),
-    ({ path }) => relative(kuusiConfig.routesPath, path),
+    walkSync(kuusiConfig.routes.path, { includeDirs: false }),
+    ({ path }) => relative(kuusiConfig.routes.path, path),
   );
 
-  const routes: KuusiRoutes = [];
+  const routes: KuusiRoute[] = [];
 
   for (const path of paths) {
     if (!path.endsWith(".route.ts")) continue;
 
     const absolutePath =
-      toFileUrl(join(Deno.cwd(), kuusiConfig.routesPath, path)).href;
+      toFileUrl(join(Deno.cwd(), kuusiConfig.routes.path, path)).href;
     const imports = await import(absolutePath) as object;
 
     if (!("route" in imports)) {
@@ -77,12 +77,12 @@ export async function getKuusiRoutes(): Promise<KuusiRoutes> {
     }
 
     routes.push([
-      new URLPattern({ pathname: parsePath(path as `${string}.route.ts`) }),
+      new URLPattern({ pathname: parsePath(path) }),
       imports.route,
     ]);
   }
 
-  if (kuusiConfig.warnAmbiguousRoutes) {
+  if (kuusiConfig.routes.warnAmbiguousRoutes) {
     for (const ambiguousURL of getAmbiguousURLs(routes)) {
       console.warn(
         `kuusi-ambiguous-url: "${ambiguousURL}" and "${ambiguousURL}/" are very similar. Consider renaming at least one of them.`,
@@ -102,7 +102,7 @@ export async function getKuusiRoutes(): Promise<KuusiRoutes> {
  */
 export async function kuusi(
   req: Request,
-  routes: KuusiRoutes,
+  routes: KuusiRoute[],
 ): Promise<Response> {
   const match = routes.find(([url]) => url.test(req.url));
 

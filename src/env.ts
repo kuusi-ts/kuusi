@@ -36,14 +36,14 @@ import { kuusiConfig } from "./config.ts";
 const env: Record<string, string> = Deno.env.toObject();
 /** An object containing all environment variables in a `.env` file. */
 const dotenv: Record<string, string> = await load({
-  envPath: kuusiConfig.envPath,
-  export: kuusiConfig.exportDotenv,
+  envPath: kuusiConfig.dotenv.path,
+  export: kuusiConfig.dotenv.export,
 });
 
-if (existsSync(join(Deno.cwd(), kuusiConfig.templateEnvPath))) {
+if (existsSync(join(Deno.cwd(), kuusiConfig.dotenv.templatePath))) {
   const templateDotenv = await load({
     export: false,
-    envPath: kuusiConfig.templateEnvPath,
+    envPath: kuusiConfig.dotenv.templatePath,
   });
 
   const notFound = Object.keys(templateDotenv).find((key) => !(key in dotenv));

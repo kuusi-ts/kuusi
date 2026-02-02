@@ -7,15 +7,20 @@
 import { existsSync } from "@std/fs/exists";
 import { join } from "@std/path/join";
 import type { KuusiConfig } from "./types.ts";
+import { isObjKey } from "./utils.ts";
 
 // Default config
 const kuusiConfig: KuusiConfig = {
-  // Windows moment
-  routesPath: Deno.build.os === "windows" ? "routes\\" : "routes/",
-  envPath: ".env",
-  templateEnvPath: "template.env",
-  exportDotenv: false,
-  warnAmbiguousRoutes: true,
+  routes: {
+    // Windows moment
+    path: "routes" + Deno.build.os === "windows" ? "\\" : "/",
+    warnAmbiguousRoutes: true,
+  },
+  dotenv: {
+    path: ".env",
+    templatePath: "template.env",
+    export: false,
+  },
 };
 
 const configImport = await import(
@@ -34,18 +39,16 @@ if ("default" in configImport && configImport.default) {
   const maybeValidConfig = configImport.default;
 
   for (const [key, value] of Object.entries(maybeValidConfig)) {
-    if (!(key in kuusiConfig)) throw invalidKuusiConfig;
+    if (!isObjKey(key, kuusiConfig)) throw invalidKuusiConfig;
 
-    if (typeof value !== typeof kuusiConfig[key as keyof KuusiConfig]) {
+    if (typeof value !== typeof kuusiConfig[key]) {
       throw invalidKuusiConfig;
     }
 
-    (kuusiConfig[key as keyof KuusiConfig] as string | boolean) = value as
-      | string
-      | boolean;
+    kuusiConfig[key] = value;
   }
 
-  if (!existsSync(kuusiConfig.routesPath, { isDirectory: true })) {
+  if (!existsSync(kuusiConfig.routes.path, { isDirectory: true })) {
     throw new Error(
       "kuusi-no-routes-directory: The routes directory does not exist.",
     );

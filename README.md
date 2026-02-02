@@ -13,7 +13,9 @@ A simple JavaScript / TypeScript framework for the backend using Deno.
 
 - Sort the fields in `KuusiConfig` by theme, so for example all dotenv fields
   are grouped in a `dotenv` object.
-- Implement websockets
-- Implement webhooks
+- Add CORS support
+  - OPTIONS verb that gives the options of that endpoint?
+- Learn about and implement websockets
+- Learn about and implement webhooks
 - ? Implement a standard way to handle databases
 - ? Implement other backend-related things
