@@ -72,7 +72,8 @@ export type KuusiConfig = {
   };
 };
 
-export type SuperPartialKuusiConfig = {
+// Notice `PartialKuusiConfig !== Partial<KuusiConfig>`
+export type PartialKuusiConfig = {
   routes?: {
     path?: string;
     warnAmbiguousRoutes?: boolean;
@@ -83,3 +84,4 @@ export type SuperPartialKuusiConfig = {
     export?: boolean;
   };
 };
+
