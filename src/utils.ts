@@ -2,6 +2,8 @@ import type { KuusiRoute } from "@kuusi/kuusi";
 
 export const pathsep = Deno.build.os === "windows" ? "\\" : "/";
 
+export const extensions = ["js", "cjs", "mjs", "ts", "cts", "mts"] as const;
+
 export const ObjectKeysof = <T extends object>(obj: T) =>
   Object.keys(obj) as (keyof T)[];
 
@@ -36,17 +38,6 @@ export const parsePath = (path: string) =>
   );
 // 9 = ".route.ts".length
 // 14 = "index.route.ts".length;
-
-// I thought this algorithm was super clever but it turns out it sucks.
-// export function getDuplicate<T>(array: T[]): T | undefined {
-//   if (new Set(array).size === array.length) return undefined;
-
-//   while (true) {
-//     const lastelement = unwrap(array.pop());
-
-//     if (new Set(array).size === array.length) return lastelement;
-//   }
-// }
 
 export const getDuplicate = <T>(array: T[]) =>
   array.filter((item, index) => array.indexOf(item) !== index);

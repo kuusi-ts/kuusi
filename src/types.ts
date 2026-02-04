@@ -27,6 +27,7 @@ export type RouteMethods = {
   GET?: RouteMethod;
   POST?: RouteMethod;
   PUT?: RouteMethod;
+  PATCH?: RouteMethod;
   DELETE?: RouteMethod;
 };
 
@@ -36,6 +37,7 @@ export type RouteMethods = {
  * @method GET The method serving the GET method of this `Route`.
  * @method POST The method serving the POST method of this `Route`.
  * @method PUT The method serving the PUT method of this `Route`.
+ * @method PATCH The method serving the PATCH method of this `Route`.
  * @method DELETE The method serving the DELETE method of this `Route`.
  *
  * @constructor Puts all the assigned methods on the class.
@@ -44,6 +46,7 @@ export class Route implements RouteMethods {
   readonly GET?: RouteMethod;
   readonly POST?: RouteMethod;
   readonly PUT?: RouteMethod;
+  readonly PATCH?: RouteMethod;
   readonly DELETE?: RouteMethod;
 
   constructor(obj: RouteMethods) {

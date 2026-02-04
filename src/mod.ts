@@ -43,10 +43,17 @@ import { walkSync } from "@std/fs";
 import { join, relative, toFileUrl } from "@std/path";
 import { kuusiConfig } from "./config.ts";
 import { type KuusiRoute, Route } from "./types.ts";
-import { getAmbiguousURLs, isObjKey, parsePath, unwrap } from "./utils.ts";
+import {
+  extensions,
+  getAmbiguousURLs,
+  isObjKey,
+  parsePath,
+  unwrap,
+} from "./utils.ts";
 
 export * from "./env.ts";
 export * from "./types.ts";
+export { type PartialKuusiConfig as KuusiConfig } from "./types.ts";
 
 /**
  * Function that collects all the routes from the routes directory.
@@ -62,18 +69,27 @@ export async function getKuusiRoutes(): Promise<KuusiRoute[]> {
   const routes: KuusiRoute[] = [];
 
   for (const path of paths) {
-    if (!path.endsWith(".route.ts")) continue;
+    const endsWithValidExtension = extensions.find((extension) =>
+      path.endsWith(`.route.${extension}`)
+    );
+    if (!endsWithValidExtension) continue;
+
+    //path.endsWith(".route.ts")) continue;
 
     const absolutePath =
       toFileUrl(join(Deno.cwd(), kuusiConfig.routes.path, path)).href;
     const imports = await import(absolutePath) as object;
 
     if (!("route" in imports)) {
-      throw new Error(`${absolutePath} does not provide a route export`);
+      throw new Error(
+        `kuusi-no-route-export: ${absolutePath} does not provide a route export`,
+      );
     }
 
     if (!(imports.route instanceof Route)) {
-      throw new Error(`${absolutePath} does not provide a valid route export`);
+      throw new Error(
+        `kuusi-no-valid-route: ${absolutePath} does not provide a valid route export`,
+      );
     }
 
     routes.push([

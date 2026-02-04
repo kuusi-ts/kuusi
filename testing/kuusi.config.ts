@@ -1,6 +1,6 @@
-import type { PartialKuusiConfig } from "@kuusi/kuusi";
+import type { KuusiConfig } from "@kuusi/kuusi";
 
-const config: PartialKuusiConfig = {
+const config: KuusiConfig = {
   routes: {
     path: "customRoutesDir/",
     warnAmbiguousRoutes: false,

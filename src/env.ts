@@ -42,15 +42,15 @@ const dotenv: Record<string, string> = await load({
 
 if (existsSync(join(Deno.cwd(), kuusiConfig.dotenv.templatePath))) {
   const templateDotenv = await load({
-    export: false,
     envPath: kuusiConfig.dotenv.templatePath,
+    export: kuusiConfig.dotenv.export,
   });
 
   const notFound = Object.keys(templateDotenv).find((key) => !(key in dotenv));
 
   if (notFound) {
     throw new Error(
-      `kuusi-missing-dotenv-key: Missing .env variable "${notFound}"`,
+      `kuusi-missing-dotenv-key: Missing dotenv variable "${notFound}"`,
     );
   }
 }

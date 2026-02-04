@@ -117,6 +117,4 @@ if (!existsSync(kuusiConfig.routes.path, { isDirectory: true })) {
   );
 }
 
-console.log(kuusiConfig);
-
 export { kuusiConfig };
