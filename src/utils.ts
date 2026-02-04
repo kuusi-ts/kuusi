@@ -1,9 +1,5 @@
 import type { KuusiRoute } from "@kuusi/kuusi";
 
-export const pathsep = Deno.build.os === "windows" ? "\\" : "/";
-
-export const extensions = ["js", "cjs", "mjs", "ts", "cts", "mts"] as const;
-
 export const ObjectKeysof = <T extends object>(obj: T) =>
   Object.keys(obj) as (keyof T)[];
 
@@ -23,9 +19,9 @@ export const isObjField = <T extends NonNullable<object>>(
 
 export function unwrap<T>(thing: T | undefined | null): NonNullable<T> {
   if (thing === undefined) {
-    throw new Error(`Unwrapping failed: value is undefined`);
+    throw new Error("Unwrapping failed: value is undefined");
   } else if (thing === null) {
-    throw new Error(`Unwrapping failed: value is null`);
+    throw new Error("Unwrapping failed: value is null");
   }
 
   return thing;

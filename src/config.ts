@@ -12,11 +12,10 @@
 
 import { existsSync } from "@std/fs/exists";
 import { join } from "@std/path/join";
-import type { KuusiConfig } from "./types.ts";
+import type { KuusiConfig, RequiredKuusiConfig } from "./types.ts";
 import { isObjField, ObjectEntriesof } from "./utils.ts";
-import type { PartialKuusiConfig } from "@kuusi/kuusi";
 
-const defaultKuusiConfig: KuusiConfig = {
+const defaultKuusiConfig: RequiredKuusiConfig = {
   routes: {
     path: `routes`,
     warnAmbiguousRoutes: true,
@@ -28,13 +27,17 @@ const defaultKuusiConfig: KuusiConfig = {
   },
 };
 
+const invalidKuusiConfig = new Error(
+  "invalid-kuusi-config: the exported kuusiConfig should be of type `KuusiConfig`",
+);
+
 // This guard should be updated when new config options have been added.
 // It's a function that semi-manually checks every field.
 // It's a temporary solution, at least, I hope it is.
-function kuusiConfigGuard(object: unknown): PartialKuusiConfig {
-  if (typeof object !== "object" || object === null) throw invalidKuusiConfig;
-
-  const maybeValidConfig = object as object;
+function kuusiConfigGuard(maybeValidConfig: unknown): KuusiConfig {
+  if (typeof maybeValidConfig !== "object" || maybeValidConfig === null) {
+    throw invalidKuusiConfig;
+  }
 
   // Checks all the base fields
   if (
@@ -63,12 +66,8 @@ function kuusiConfigGuard(object: unknown): PartialKuusiConfig {
     )
   ) throw invalidKuusiConfig;
 
-  return maybeValidConfig as PartialKuusiConfig;
+  return maybeValidConfig as KuusiConfig;
 }
-
-const invalidKuusiConfig = new Error(
-  "invalid-kuusi-config: the exported kuusiConfig should be of type `PartialKuusiConfig`",
-);
 
 const kuusiConfigImport = await import(
   join(Deno.cwd(), "kuusi.config.ts")
@@ -99,15 +98,6 @@ if ("default" in kuusiConfigImport && kuusiConfigImport.default) {
         importedConfig.routes[key] ?? value;
     }
   }
-
-  // if (importedConfig.routes) {
-  //   kuusiConfig.routes = {
-  //     export: importedConfig.dotenv.export ?? defaultKuusiConfig.dotenv.export,
-  //     path: importedConfig.dotenv.path ?? defaultKuusiConfig.dotenv.path,
-  //     templatePath: importedConfig.dotenv.templatePath ??
-  //       defaultKuusiConfig.dotenv.templatePath,
-  //   };
-  // }
 }
 
 if (!existsSync(kuusiConfig.routes.path, { isDirectory: true })) {

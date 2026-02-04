@@ -43,17 +43,10 @@ import { walkSync } from "@std/fs";
 import { join, relative, toFileUrl } from "@std/path";
 import { kuusiConfig } from "./config.ts";
 import { type KuusiRoute, Route } from "./types.ts";
-import {
-  extensions,
-  getAmbiguousURLs,
-  isObjKey,
-  parsePath,
-  unwrap,
-} from "./utils.ts";
+import { getAmbiguousURLs, isObjKey, parsePath, unwrap } from "./utils.ts";
 
 export * from "./env.ts";
 export * from "./types.ts";
-export { type PartialKuusiConfig as KuusiConfig } from "./types.ts";
 
 /**
  * Function that collects all the routes from the routes directory.
@@ -69,12 +62,7 @@ export async function getKuusiRoutes(): Promise<KuusiRoute[]> {
   const routes: KuusiRoute[] = [];
 
   for (const path of paths) {
-    const endsWithValidExtension = extensions.find((extension) =>
-      path.endsWith(`.route.${extension}`)
-    );
-    if (!endsWithValidExtension) continue;
-
-    //path.endsWith(".route.ts")) continue;
+    if (!/.route.(m|c)?(j|t)s$/.exec(path)) continue;
 
     const absolutePath =
       toFileUrl(join(Deno.cwd(), kuusiConfig.routes.path, path)).href;

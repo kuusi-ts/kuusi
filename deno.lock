@@ -51,7 +51,7 @@
       },
       "testing": {
         "dependencies": [
-          "jsr:@kuusi/kuusi@~0.2.2"
+          "jsr:@kuusi/kuusi@0.3"
         ]
       },
       "tests": {

@@ -63,7 +63,7 @@ export class Route implements RouteMethods {
  * @property exportDotenv: whether the dotenv variables should also be included in the env variables. Defaults to `false`.
  * @property warnAmbiguousRoutes: whether a warning should be shown when two url's only differ by a trailing forwardslash.
  */
-export type KuusiConfig = {
+export type RequiredKuusiConfig = {
   routes: {
     path: string;
     warnAmbiguousRoutes: boolean;
@@ -75,8 +75,8 @@ export type KuusiConfig = {
   };
 };
 
-// Notice `PartialKuusiConfig !== Partial<KuusiConfig>`
-export type PartialKuusiConfig = {
+// Notice `RequiredKuusiConfig !== Required<KuusiConfig>`
+export type KuusiConfig = {
   routes?: {
     path?: string;
     warnAmbiguousRoutes?: boolean;
