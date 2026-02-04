@@ -62,18 +62,22 @@ export async function getKuusiRoutes(): Promise<KuusiRoute[]> {
   const routes: KuusiRoute[] = [];
 
   for (const path of paths) {
-    if (!path.endsWith(".route.ts")) continue;
+    if (!/.route.(m|c)?(j|t)s$/.exec(path)) continue;
 
     const absolutePath =
       toFileUrl(join(Deno.cwd(), kuusiConfig.routes.path, path)).href;
     const imports = await import(absolutePath) as object;
 
     if (!("route" in imports)) {
-      throw new Error(`${absolutePath} does not provide a route export`);
+      throw new Error(
+        `kuusi-no-route-export: ${absolutePath} does not provide a route export`,
+      );
     }
 
     if (!(imports.route instanceof Route)) {
-      throw new Error(`${absolutePath} does not provide a valid route export`);
+      throw new Error(
+        `kuusi-no-valid-route: ${absolutePath} does not provide a valid route export`,
+      );
     }
 
     routes.push([

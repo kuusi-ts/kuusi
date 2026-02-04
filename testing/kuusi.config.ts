@@ -1,9 +1,9 @@
-import type { SuperPartialKuusiConfig } from "@kuusi/kuusi";
+import type { KuusiConfig } from "@kuusi/kuusi";
 
-const config: SuperPartialKuusiConfig = {
+const config: KuusiConfig = {
   routes: {
-    path: "customRoutesDir",
-    warnAmbiguousRoutes: false,
+    path: "customRoutesDir/",
+    warnAmbiguousRoutes: true,
   },
   dotenv: {
     path: "new.env",

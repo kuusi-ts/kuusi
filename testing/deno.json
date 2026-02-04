@@ -4,6 +4,6 @@
     "dev-watch": "deno --allow-env --allow-read --allow-net --watch src/index.ts"
   },
   "imports": {
-    "@kuusi/kuusi": "jsr:@kuusi/kuusi@^0.2.2"
+    "@kuusi/kuusi": "jsr:@kuusi/kuusi@^0.3.0"
   }
 }
