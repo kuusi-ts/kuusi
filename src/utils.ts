@@ -1,4 +1,8 @@
-import type { KuusiRoute } from "@kuusi/kuusi";
+import type { Route } from "./types.ts";
+
+export type MaybePromise<T> = T | Promise<T>;
+
+export const httpVerbs = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"];
 
 export const ObjectKeysof = <T extends object>(obj: T) =>
   Object.keys(obj) as (keyof T)[];
@@ -27,18 +31,21 @@ export function unwrap<T>(thing: T | undefined | null): NonNullable<T> {
   return thing;
 }
 
-export const parsePath = (path: string) =>
-  "/" + path.slice(
-    0,
-    path.split("/").at(-1) === "index.route.ts" ? -14 : -9,
-  );
-// 9 = ".route.ts".length
-// 14 = "index.route.ts".length;
+export const parsePath = (path: string) => {
+  path = path.split(".").slice(0, -1).join(".");
+
+  if (path.endsWith("hook")) path = path.slice(0, -5);
+  else if (path.endsWith("source")) path = path.slice(0, -7);
+
+  if (path.endsWith("index")) path = path.slice(0, -5);
+
+  return "/" + path;
+};
 
 export const getDuplicate = <T>(array: T[]) =>
   array.filter((item, index) => array.indexOf(item) !== index);
 
-export const getAmbiguousURLs = (routes: KuusiRoute[]) =>
+export const getAmbiguousURLs = (routes: Route[]) =>
   getDuplicate(
     routes.map(([url]) =>
       url.pathname.endsWith("/") ? url.pathname.slice(0, -1) : url.pathname

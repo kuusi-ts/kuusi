@@ -1,3 +1,5 @@
 test.ts
 .env
 /node_modules
+/testing
+/webhooksTesting

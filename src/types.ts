@@ -1,3 +1,5 @@
+import type { MaybePromise } from "./utils.ts";
+
 /**
  * Module containing all the types kuusi exports.
  *
@@ -5,9 +7,14 @@
  */
 
 /**
- * Type of an array of tuples that hold the URLPattern and the Route of each Route.
+ * Type that holds a URLPattern and a Route. Used to combine the path of a Route with the Route itself.
  */
-export type KuusiRoute = [URLPattern, Route];
+export type Route = [URLPattern, WebSource | WebHook];
+
+/**
+ * Type that holds the URLPattern and a WebHook. Used to combine the path of a WebHook with the WebHook itself.
+ */
+export type KuusiWebHook = [URLPattern, WebHook];
 
 /**
  * Type of a method that serves a HTTP method on a route.
@@ -15,42 +22,71 @@ export type KuusiRoute = [URLPattern, Route];
  * @property req The Request that the method should fullfill.
  * @property patternResult The URLPatternResult containing the data of the match.
  */
-export type RouteMethod = (
+export type WebSourceMethod = (
   req: Request,
   patternResult: URLPatternResult,
-) => Promise<Response> | Response;
+) => MaybePromise<Response>;
 
 /**
  * Type that is implemented by `Route`, and used by said class in the constructor as parameter type. Holds the same properties as `Route`, but they aren't `readonly`.
  */
-export type RouteMethods = {
-  GET?: RouteMethod;
-  POST?: RouteMethod;
-  PUT?: RouteMethod;
-  PATCH?: RouteMethod;
-  DELETE?: RouteMethod;
-};
+export interface WebSourceMethods {
+  GET?: WebSourceMethod;
+  POST?: WebSourceMethod;
+  PUT?: WebSourceMethod;
+  PATCH?: WebSourceMethod;
+  DELETE?: WebSourceMethod;
+}
 
 /**
  * Class that represents a kuusi route. A property holding the UrlPattern is unnecessary, because kuusi's file system-based routing makes the path of the file the UrlPattern url.
  *
- * @method GET The method serving the GET method of this `Route`.
- * @method POST The method serving the POST method of this `Route`.
- * @method PUT The method serving the PUT method of this `Route`.
- * @method PATCH The method serving the PATCH method of this `Route`.
- * @method DELETE The method serving the DELETE method of this `Route`.
+ * @property GET The method serving the GET method of this `Route`.
+ * @property POST The method serving the POST method of this `Route`.
+ * @property PUT The method serving the PUT method of this `Route`.
+ * @property PATCH The method serving the PATCH method of this `Route`.
+ * @property DELETE The method serving the DELETE method of this `Route`.
  *
  * @constructor Puts all the assigned methods on the class.
  */
-export class Route implements RouteMethods {
-  readonly GET?: RouteMethod;
-  readonly POST?: RouteMethod;
-  readonly PUT?: RouteMethod;
-  readonly PATCH?: RouteMethod;
-  readonly DELETE?: RouteMethod;
+export class WebSource implements WebSourceMethods {
+  readonly GET?: WebSourceMethod;
+  readonly POST?: WebSourceMethod;
+  readonly PUT?: WebSourceMethod;
+  readonly PATCH?: WebSourceMethod;
+  readonly DELETE?: WebSourceMethod;
+  readonly OPTIONS?: WebSourceMethod = () => {
+    return new Response(JSON.stringify(Object.entries(this)));
+  };
 
-  constructor(obj: RouteMethods) {
+  constructor(obj: WebSourceMethods) {
     Object.assign(this, obj);
+  }
+}
+
+export type WebHookTrigger = () => MaybePromise<void>;
+
+/**
+ * Type that is implemented by `Source`, and used by said class in the constructor as parameter type. Holds the same properties as `Route`, but they aren't `readonly`.
+ */
+export interface WebHookMethods extends WebSourceMethods {
+  trigger: WebHookTrigger;
+}
+
+/**
+ * Class that represents a kuusi route. A property holding the UrlPattern is unnecessary, because kuusi's file system-based routing makes the path of the file the UrlPattern url.
+ *
+ * @property trigger The method that triggers the webhook.
+ * @property subscribe The method that subscribes a server.
+ *
+ * @constructor Puts all the assigned methods on the class.
+ */
+export class WebHook extends WebSource {
+  readonly trigger: WebHookTrigger;
+
+  constructor(obj: WebHookMethods) {
+    super(obj);
+    this.trigger = obj.trigger;
   }
 }
 
@@ -87,4 +123,3 @@ export type KuusiConfig = {
     export?: boolean;
   };
 };
-
