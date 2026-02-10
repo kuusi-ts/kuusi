@@ -104,7 +104,6 @@ if (existsSync(join(Deno.cwd(), "kuusi.config.ts"))) {
 }
 
 if (!existsSync(kuusiConfig.routes.path, { isDirectory: true })) {
-  console.log(kuusiConfig.routes.path);
   throw new Error(
     "kuusi-no-routes-directory: The routes directory does not exist.",
   );
