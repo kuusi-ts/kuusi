@@ -1,11 +1,11 @@
 /**
  * kuusi: Se ei ole Oak-viittaus. A simple router / library / framework for Deno utilizing file-based routing.
  *
+ * > routes/index.source.ts
  * ```ts
- * // routes/index.source.ts
- * import { Route } from "@kuusi/kuusi";
+ * import { WebSource } from "@kuusi/kuusi";
  *
- * export const route = new Route({
+ * export const route = new WebSource({
  *   GET: (req, patternResult) => {
  *     return new Response(
  *       JSON.stringify({
@@ -22,8 +22,8 @@
  * });
  * ```
  *
+ * > src/index.ts
  * ```ts
- * // src/index.ts
  * import { kuusi } from "@kuusi/kuusi";
  *
  * const routes = getKuusiRoutes();

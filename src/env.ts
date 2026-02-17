@@ -2,6 +2,8 @@
  * This module contains env and dotenv exports. Whether the dotenv variables should be included in the env object can be configured in the `kuusi.config.ts` file.
  *
  * @example
+ *
+ * ~> .env
  * ```dotenv
  * one="yksi"
  * two="kaksi"

@@ -4,13 +4,15 @@
  * @module
  */
 
-// To anyone editing this file, either someone else or my future self. I am sorry.
-// This code is total garbage, I know. It's just that (as of writing this, 02-02-2026)
-// TypeScripts keyof checking is just garbage. Because of some weird quirk with
-// extended classes the Object.keys() function returns `string[]` instead of
-// `(keyof type)[]` which just fucks with everything. I wish I could use typia
-// for this, but that would only cover half the cursedness of this. The other
-// half is just my incompetence.
+/*
+  To anyone editing this file, either someone else or my future self. I am
+  sorry. This code is total garbage, I know. It's just that (as of writing
+  this, 02-02-2026), TypeScripts keyof checking is just garbage. Because of
+  some weird quirk with extended classes the Object.keys() function returns
+  `string[]` instead of `(keyof type)[]` which just fucks with everything. I
+  wish I could use typia for this, but that would only cover half the
+  cursedness of this. The other half is just my incompetence.
+*/
 
 import { existsSync } from "@std/fs";
 import { join } from "@std/path";

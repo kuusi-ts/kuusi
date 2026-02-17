@@ -2,10 +2,17 @@ import type { Route } from "./types.ts";
 
 export type MaybePromise<T> = T | Promise<T>;
 
-export const httpVerbs = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"];
+export const httpVerbs: string[] = [
+  "GET",
+  "POST",
+  "PUT",
+  "PATCH",
+  "DELETE",
+  "OPTIONS",
+] as const;
 
-export const ObjectKeysof = <T extends object>(obj: T) =>
-  Object.keys(obj) as (keyof T)[];
+// export const ObjectKeysof = <T extends object>(obj: T) =>
+//   Object.keys(obj) as (keyof T)[];
 
 export const ObjectEntriesof = <T extends object>(obj: T) =>
   Object.entries(obj) as [keyof T, T[keyof T]][];
@@ -21,17 +28,20 @@ export const isObjField = <T extends NonNullable<object>>(
   obj: T,
 ): key is keyof T => isObjKey(key, obj) && typeof value === typeof obj[key];
 
-export function unwrap<T>(thing: T | undefined | null): NonNullable<T> {
-  if (thing === undefined) {
+export function unwrap<T>($: T | undefined | null): NonNullable<T> {
+  if ($ === undefined) {
     throw new Error("Unwrapping failed: value is undefined");
-  } else if (thing === null) {
+  } else if ($ === null) {
     throw new Error("Unwrapping failed: value is null");
   }
 
-  return thing;
+  return $;
+
+  // Using $ feels very illegal
 }
 
 export const parsePath = (path: string) => {
+  // Removes the file extensions
   path = path.split(".").slice(0, -1).join(".");
 
   if (path.endsWith("hook")) path = path.slice(0, -5);
