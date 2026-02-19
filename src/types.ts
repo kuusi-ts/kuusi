@@ -13,48 +13,7 @@ import type { MaybePromise } from "./utils.ts";
 export type Route = [URLPattern, WebSource | WebHook];
 
 /**
- * Type of a method that serves a HTTP method on a route.
- *
- * @param {Request} req The Request that the method should fullfill.
- * @param {URLPatternResult} patternResult The URLPatternResult containing the
- * data of the match.
- *
- * @returns {MaybePromise<Response>}
- */
-export type WebSourceMethod = (
-  req: Request,
-  patternResult: URLPatternResult,
-) => MaybePromise<Response>;
-
-/**
- * Type that is implemented by `Route`, and used by said class in the
- * constructor as parameter type. Holds the same properties as `Route`, but
- * they aren't `readonly`.
- *
- * @property {WebSourceMethod | undefined} GET? The method serving the GET
- * method of a `WebSource`.
- * @property {WebSourceMethod | undefined} POST? The method serving the POST
- * method of a `WebSource`.
- * @property {WebSourceMethod | undefined} PUT? The method serving the PUT
- * method of a `WebSource`.
- * @property {WebSourceMethod | undefined} PATCH? The method serving the PATCH
- * method of a `WebSource`.
- * @property {WebSourceMethod | undefined} DELETE? The method serving the DELETE
- * method of a `WebSource`.
- */
-export interface WebSourceMethods {
-  readonly GET?: WebSourceMethod;
-  readonly POST?: WebSourceMethod;
-  readonly PUT?: WebSourceMethod;
-  readonly PATCH?: WebSourceMethod;
-  readonly DELETE?: WebSourceMethod;
-  readonly OPTIONS?: WebSourceMethod;
-}
-
-/**
- * Class that represents a kuusi route. A property holding the UrlPattern is
- * unnecessary, because kuusi's file system-based routing makes the path of
- * the file the UrlPattern url.
+ * Class that represents a kuusi WebSource.
  *
  * Note: A WebSource is what is known as a regular API endpoint.
  *
@@ -68,8 +27,11 @@ export interface WebSourceMethods {
  * method of this `WebSource`.
  * @property {WebSourceMethod | undefined} DELETE? The method serving the DELETE
  * method of this `WebSource`.
+ * @property {WebSourceMethod | undefined} OPTIONS? The method serving the OPTIONS
+ * method of this `WebSource`. Defaults to returning a response containing a body
+ * with the defined methods of this `WebSource`.
  *
- * @implements WebHookMethods.
+ * @implements WebHookMethods
  *
  * @constructor constructor Puts all the assigned methods on the class.
  */
@@ -79,9 +41,8 @@ export class WebSource implements WebSourceMethods {
   readonly PUT?: WebSourceMethod;
   readonly PATCH?: WebSourceMethod;
   readonly DELETE?: WebSourceMethod;
-  readonly OPTIONS?: WebSourceMethod = () => {
-    return new Response(JSON.stringify(Object.entries(this)));
-  };
+  readonly OPTIONS?: WebSourceMethod = () =>
+    new Response(JSON.stringify(Object.entries(this)));
 
   constructor(obj: WebSourceMethods) {
     Object.assign(this, obj);
@@ -89,22 +50,45 @@ export class WebSource implements WebSourceMethods {
 }
 
 /**
- * The type of the trigger of a webhook. The trigger function holds the logic
- * that sends data to all subscribers.
+ * Interface that is implemented by `Route`, and used by said class in the
+ * constructor as parameter type. Holds the same properties as `Route`, but
+ * they aren't `readonly`.
  *
- * @returns {MaybePromise<void>}
+ * @property {WebSourceMethod | undefined} GET? The method serving the GET
+ * method of a `WebSource`.
+ * @property {WebSourceMethod | undefined} POST? The method serving the POST
+ * method of a `WebSource`.
+ * @property {WebSourceMethod | undefined} PUT? The method serving the PUT
+ * method of a `WebSource`.
+ * @property {WebSourceMethod | undefined} PATCH? The method serving the PATCH
+ * method of a `WebSource`.
+ * @property {WebSourceMethod | undefined} DELETE? The method serving the DELETE
+ * method of a `WebSource`.
+ * @property {WebSourceMethod | undefined} OPTIONS? The method serving the OPTIONS
+ * method of a `WebSource`.
  */
-export type WebHookTrigger = () => MaybePromise<void>;
+export interface WebSourceMethods {
+  readonly GET?: WebSourceMethod;
+  readonly POST?: WebSourceMethod;
+  readonly PUT?: WebSourceMethod;
+  readonly PATCH?: WebSourceMethod;
+  readonly DELETE?: WebSourceMethod;
+  readonly OPTIONS?: WebSourceMethod;
+}
 
 /**
- * Interface that is implemented by `WebSourceMethods`, and is used by
- * `WebSource` as a constructor parameter type.
+ * Type of a method that serves a HTTP method on a route.
  *
- * @property {WebHookTrigger} trigger The method that triggers the webhook.
+ * @param {Request} req The Request that the method should fullfill.
+ * @param {URLPatternResult} patternResult The URLPatternResult containing the
+ * data of the match.
+ *
+ * @returns {MaybePromise<Response>}
  */
-export interface WebHookMethods extends WebSourceMethods {
-  readonly trigger: WebHookTrigger;
-}
+export type WebSourceMethod = (
+  req: Request,
+  patternResult: URLPatternResult,
+) => MaybePromise<Response>;
 
 /**
  * Class that represents a webhook. Inherits from the `WebSource` class.
@@ -123,6 +107,24 @@ export class WebHook extends WebSource {
     this.trigger = obj.trigger;
   }
 }
+
+/**
+ * Interface that is implemented by `WebSourceMethods`, and is used by
+ * `WebSource` as a constructor parameter type.
+ *
+ * @property {WebHookTrigger} trigger The method that triggers the webhook.
+ */
+export interface WebHookMethods extends WebSourceMethods {
+  readonly trigger: WebHookTrigger;
+}
+
+/**
+ * Type of the trigger of a webhook. The trigger function holds the logic
+ * that sends data to all subscribers.
+ *
+ * @returns {MaybePromise<void>}
+ */
+export type WebHookTrigger = () => MaybePromise<void>;
 
 /**
  * Type holding the configgable options for kuusi.

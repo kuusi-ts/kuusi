@@ -1,7 +1,7 @@
 /**
  * kuusi: Se ei ole Oak-viittaus. A simple router / library / framework for Deno utilizing file-based routing.
  *
- * > routes/index.source.ts
+ * ~> `routes/index.source.ts`
  * ```ts
  * import { WebSource } from "@kuusi/kuusi";
  *
@@ -22,7 +22,7 @@
  * });
  * ```
  *
- * > src/index.ts
+ * ~> `src/index.ts`
  * ```ts
  * import { kuusi } from "@kuusi/kuusi";
  *
@@ -140,12 +140,14 @@ export async function getKuusiRoutes(): Promise<Route[]> {
  * @returns {Promise<Response>} A response from the route if a match was found. If there was no match, the response is a 404. If there was a match, but the endpoint did not support the HTTP verb of the request, the response is 405.
  */
 export async function kuusi(req: Request, routes: Route[]): Promise<Response> {
+  const headers = {
+    "content-type": "application/json; charset=utf-8",
+  };
+
   if (!httpVerbs.includes(req.method)) {
     return new Response("{}", {
       status: 405,
-      headers: {
-        "content-type": "application/json; charset=utf-8",
-      },
+      ...headers,
     });
   }
 
@@ -154,9 +156,7 @@ export async function kuusi(req: Request, routes: Route[]): Promise<Response> {
   if (!match) {
     return new Response("{}", {
       status: 404,
-      headers: {
-        "content-type": "application/json; charset=utf-8",
-      },
+      ...headers,
     });
   }
 
@@ -167,9 +167,7 @@ export async function kuusi(req: Request, routes: Route[]): Promise<Response> {
   if (!matchMethod) {
     return new Response("{}", {
       status: 405,
-      headers: {
-        "content-type": "application/json; charset=utf-8",
-      },
+      ...headers,
     });
   }
 

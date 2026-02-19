@@ -3,7 +3,7 @@
  *
  * @example
  *
- * ~> .env
+ * ~> `.env`
  * ```dotenv
  * one="yksi"
  * two="kaksi"
@@ -13,6 +13,7 @@
  * spruce="kuusi"
  * ```
  *
+ * ~> `src/index.ts`
  * ```ts
  * import { dotenv } from "@kuusi/kuusi/env";
  * import { assertEquals } from "@std/assert";
