@@ -133,12 +133,16 @@ export async function getKuusiRoutes(): Promise<Route[]> {
 }
 
 /**
- * A simple router that uses file system-based routing on the specified routes directory.
+ * A simple router that uses file system-based routing on the specified routes
+ * directory.
  *
  * @param {Request} req The request that needs to be handled.
- * @param {Route[]} routes The loaded routes. Notice that they can be collected by kuusi's `getKuusiRoutes` function, but is not required.
+ * @param {Route[]} routes The loaded routes. Notice that they can be collected
+ * by kuusi's `getKuusiRoutes` function, but is not required.
  *
- * @returns {Promise<Response>} A response from the route if a match was found. If there was no match, the response is a 404. If there was a match, but the endpoint did not support the HTTP verb of the request, the response is 405.
+ * @returns {Promise<Response>} A response from the route if a match was found.
+ * If there was no match, the response is a 404. If there was a match, but the
+ * endpoint did not support the HTTP verb of the request, the response is 405.
  */
 export async function kuusi(req: Request, routes: Route[]): Promise<Response> {
   const headers = {
@@ -165,12 +169,10 @@ export async function kuusi(req: Request, routes: Route[]): Promise<Response> {
   const matchPatternResult = unwrap(matchPattern.exec(req.url));
   const matchMethod = matchRoute?.[req.method as keyof (WebSource | WebHook)];
 
-  if (!matchMethod) {
-    return new Response("{}", {
+  return matchMethod
+    ? await matchMethod(req, matchPatternResult)
+    : new Response("{}", {
       status: 405,
       ...headers,
     });
-  }
-
-  return await matchMethod(req, matchPatternResult);
 }

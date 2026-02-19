@@ -35,6 +35,7 @@ export const isObjField = <T extends NonNullable<object>>(
 ): key is keyof T => isObjKey(key, obj) && typeof value === typeof obj[key];
 
 export function unwrap<T>($: T | undefined | null): NonNullable<T> {
+  // Using $ feels very illegal
   if ($ === undefined) {
     throw new Error("Unwrapping failed: value is undefined");
   } else if ($ === null) {
@@ -42,8 +43,6 @@ export function unwrap<T>($: T | undefined | null): NonNullable<T> {
   }
 
   return $;
-
-  // Using $ feels very illegal
 }
 
 export const parsePath = (path: string) => {
