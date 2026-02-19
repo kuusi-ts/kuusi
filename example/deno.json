@@ -5,6 +5,6 @@
   },
   "imports": {
     "$src/": "./src/",
-    "@kuusi/kuusi": "jsr:@kuusi/kuusi@^0.4.0"
+    "@kuusi/kuusi": "jsr:@kuusi/kuusi@^0.4.1"
   }
 }
