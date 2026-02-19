@@ -7,6 +7,7 @@ const config: KuusiConfig = {
   },
   dotenv: {
     path: "new.env",
+    export: true,
     templatePath: "newTemplate.env",
   },
 };

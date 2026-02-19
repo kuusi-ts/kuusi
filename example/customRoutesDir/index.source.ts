@@ -1,12 +1,11 @@
-import { Route } from "@kuusi/kuusi";
+import { WebSource } from "@kuusi/kuusi";
 
-export const route = new Route({
-  GET: (req, patternResult) => {
+const route = new WebSource({
+  GET: (req: Request): Response => {
     return new Response(
       JSON.stringify({
-        message: "Welcome to kuusi!",
-        url: req.url,
-        from: "not index",
+        message: "hello",
+        request: req,
       }),
       {
         status: 200,
@@ -17,3 +16,5 @@ export const route = new Route({
     );
   },
 });
+
+export default route;

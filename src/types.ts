@@ -4,64 +4,142 @@
  * @module
  */
 
-/**
- * Type of an array of tuples that hold the URLPattern and the Route of each Route.
- */
-export type KuusiRoute = [URLPattern, Route];
+import type { MaybePromise } from "./utils.ts";
 
 /**
- * Type of a method that serves a HTTP method on a route.
+ * Type that holds a URLPattern and a Route. Used to combine the path of a
+ * `Route` with the `Route` itself.
+ */
+export type Route = [URLPattern, WebSource | WebHook];
+
+/**
+ * Class that represents a kuusi WebSource.
  *
- * @property req The Request that the method should fullfill.
- * @property patternResult The URLPatternResult containing the data of the match.
- */
-export type RouteMethod = (
-  req: Request,
-  patternResult: URLPatternResult,
-) => Promise<Response> | Response;
-
-/**
- * Type that is implemented by `Route`, and used by said class in the constructor as parameter type. Holds the same properties as `Route`, but they aren't `readonly`.
- */
-export type RouteMethods = {
-  GET?: RouteMethod;
-  POST?: RouteMethod;
-  PUT?: RouteMethod;
-  PATCH?: RouteMethod;
-  DELETE?: RouteMethod;
-};
-
-/**
- * Class that represents a kuusi route. A property holding the UrlPattern is unnecessary, because kuusi's file system-based routing makes the path of the file the UrlPattern url.
+ * Note: A WebSource is what is known as a regular API endpoint.
  *
- * @method GET The method serving the GET method of this `Route`.
- * @method POST The method serving the POST method of this `Route`.
- * @method PUT The method serving the PUT method of this `Route`.
- * @method PATCH The method serving the PATCH method of this `Route`.
- * @method DELETE The method serving the DELETE method of this `Route`.
+ * @property {WebSourceMethod | undefined} GET? The method serving the GET
+ * method of this `WebSource`.
+ * @property {WebSourceMethod | undefined} POST? The method serving the POST
+ * method of this `WebSource`.
+ * @property {WebSourceMethod | undefined} PUT? The method serving the PUT
+ * method of this `WebSource`.
+ * @property {WebSourceMethod | undefined} PATCH? The method serving the PATCH
+ * method of this `WebSource`.
+ * @property {WebSourceMethod | undefined} DELETE? The method serving the DELETE
+ * method of this `WebSource`.
+ * @property {WebSourceMethod | undefined} OPTIONS? The method serving the OPTIONS
+ * method of this `WebSource`. Defaults to returning a response containing a body
+ * with the defined methods of this `WebSource`.
  *
- * @constructor Puts all the assigned methods on the class.
+ * @implements WebHookMethods
+ *
+ * @constructor constructor Puts all the assigned methods on the class.
  */
-export class Route implements RouteMethods {
-  readonly GET?: RouteMethod;
-  readonly POST?: RouteMethod;
-  readonly PUT?: RouteMethod;
-  readonly PATCH?: RouteMethod;
-  readonly DELETE?: RouteMethod;
+export class WebSource implements WebSourceMethods {
+  readonly GET?: WebSourceMethod;
+  readonly POST?: WebSourceMethod;
+  readonly PUT?: WebSourceMethod;
+  readonly PATCH?: WebSourceMethod;
+  readonly DELETE?: WebSourceMethod;
+  readonly OPTIONS?: WebSourceMethod = () =>
+    new Response(JSON.stringify(Object.entries(this)));
 
-  constructor(obj: RouteMethods) {
+  constructor(obj: WebSourceMethods) {
     Object.assign(this, obj);
   }
 }
 
 /**
+ * Interface that is implemented by `Route`, and used by said class in the
+ * constructor as parameter type. Holds the same properties as `Route`, but
+ * they aren't `readonly`.
+ *
+ * @property {WebSourceMethod | undefined} GET? The method serving the GET
+ * method of a `WebSource`.
+ * @property {WebSourceMethod | undefined} POST? The method serving the POST
+ * method of a `WebSource`.
+ * @property {WebSourceMethod | undefined} PUT? The method serving the PUT
+ * method of a `WebSource`.
+ * @property {WebSourceMethod | undefined} PATCH? The method serving the PATCH
+ * method of a `WebSource`.
+ * @property {WebSourceMethod | undefined} DELETE? The method serving the DELETE
+ * method of a `WebSource`.
+ * @property {WebSourceMethod | undefined} OPTIONS? The method serving the OPTIONS
+ * method of a `WebSource`.
+ */
+export interface WebSourceMethods {
+  readonly GET?: WebSourceMethod;
+  readonly POST?: WebSourceMethod;
+  readonly PUT?: WebSourceMethod;
+  readonly PATCH?: WebSourceMethod;
+  readonly DELETE?: WebSourceMethod;
+  readonly OPTIONS?: WebSourceMethod;
+}
+
+/**
+ * Type of a method that serves a HTTP method on a route.
+ *
+ * @param {Request} req The Request that the method should fullfill.
+ * @param {URLPatternResult} patternResult The URLPatternResult containing the
+ * data of the match.
+ *
+ * @returns {MaybePromise<Response>}
+ */
+export type WebSourceMethod = (
+  req: Request,
+  patternResult: URLPatternResult,
+) => MaybePromise<Response>;
+
+/**
+ * Class that represents a webhook. Inherits from the `WebSource` class.
+ *
+ * @property {WebHookTrigger} trigger The method that triggers the webhook.
+ *
+ * @extends WebSource
+ *
+ * @constructor constructor Puts all the assigned methods on the class.
+ */
+export class WebHook extends WebSource {
+  readonly trigger: WebHookTrigger;
+
+  constructor(obj: WebHookMethods) {
+    super(obj);
+    this.trigger = obj.trigger;
+  }
+}
+
+/**
+ * Interface that is implemented by `WebSourceMethods`, and is used by
+ * `WebSource` as a constructor parameter type.
+ *
+ * @property {WebHookTrigger} trigger The method that triggers the webhook.
+ */
+export interface WebHookMethods extends WebSourceMethods {
+  readonly trigger: WebHookTrigger;
+}
+
+/**
+ * Type of the trigger of a webhook. The trigger function holds the logic
+ * that sends data to all subscribers.
+ *
+ * @returns {MaybePromise<void>}
+ */
+export type WebHookTrigger = () => MaybePromise<void>;
+
+/**
  * Type holding the configgable options for kuusi.
  *
- * @property routePath: The path to the directory that holds the routes. Defaults to `routes/`.
- * @property envPath: The path to the dotenv file that will be loaded. Defaults to `.env`.
- * @property templateEnvPath: The path to the template dotenv file that will be loaded. The template dotenv file contains all keys that the dotenv file must contain. Defaults to `template.env`.
- * @property exportDotenv: whether the dotenv variables should also be included in the env variables. Defaults to `false`.
- * @property warnAmbiguousRoutes: whether a warning should be shown when two url's only differ by a trailing forwardslash.
+ * @property {string} routes.path The path to the directory that holds the
+ * routes. Defaults to `routes/`.
+ * @property {boolean} routes.warnAmbiguousRoutes Whether a warning should be
+ * shown when two url's only differ by a trailing forwardslash.
+ * @property {string} dotenv.path The path to the template dotenv file that
+ * will be loaded. The template dotenv file contains all keys that the dotenv
+ * file must contain. Defaults to `template.env`.
+ * @property {string} dotenv.templatePath The path to the dotenv file that will
+ * be loaded. Defaults to `.env`.
+ * @property {boolean} dotenv.export Whether the dotenv variables should also
+ * be included in the env variables. Defaults to `false`.
  */
 export type RequiredKuusiConfig = {
   routes: {
@@ -75,7 +153,12 @@ export type RequiredKuusiConfig = {
   };
 };
 
-// Notice `RequiredKuusiConfig !== Required<KuusiConfig>`
+/**
+ * Type holding all the fields of `KuusiConfig` with all its fields set to
+ * optional, even all the fields of fields that contain objects.
+ *
+ * Notice `RequiredKuusiConfig !== Required<KuusiConfig>`
+ */
 export type KuusiConfig = {
   routes?: {
     path?: string;
@@ -87,4 +170,3 @@ export type KuusiConfig = {
     export?: boolean;
   };
 };
-
