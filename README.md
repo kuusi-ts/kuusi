@@ -8,6 +8,7 @@ A simple JavaScript / TypeScript framework for the backend using Deno.
 
 - Files based routing, with url arguments.
 - env and dotenv parsing.
+- Simple configuring with `kuusi.config.ts`.
 
 ## To do list
 
@@ -17,8 +18,10 @@ A simple JavaScript / TypeScript framework for the backend using Deno.
   - Route config option seems best
 - Learn about and implement websockets
   - `Deno.upgradeWebSocket`?
+  - Deno has this already completely fixed, so I don't really know what I could add still.
 - Learn about and implement webhooks
 - ? Implement a standard way to handle databases
+  - May be too difficult, as I have too little experience with anything other tha sqlite3
 - ? Implement other backend-related things
 
 ## Already done list

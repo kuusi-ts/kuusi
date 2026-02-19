@@ -5,7 +5,7 @@
     "@std/fs": "jsr:@std/fs@^1.0.22",
     "@std/path": "jsr:@std/path@^1.1.4"
   },
-  "workspace": ["./src/", "./testing", "./tests"],
+  "workspace": ["./src/", "./example", "./tests"],
   "lint": {
     "rules": {
       "tags": ["recommended", "jsr"],

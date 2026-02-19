@@ -1,10 +1,10 @@
-import type { MaybePromise } from "./utils.ts";
-
 /**
  * Module containing all the types kuusi exports.
  *
  * @module
  */
+
+import type { MaybePromise } from "./utils.ts";
 
 /**
  * Type that holds a URLPattern and a Route. Used to combine the path of a

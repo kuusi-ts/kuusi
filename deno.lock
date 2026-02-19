@@ -41,17 +41,16 @@
       "jsr:@std/path@^1.1.4"
     ],
     "members": {
+      "example": {
+        "dependencies": [
+          "jsr:@kuusi/kuusi@0.4"
+        ]
+      },
       "src": {
         "dependencies": [
-          "jsr:@std/assert@^1.0.18",
           "jsr:@std/dotenv@~0.225.6",
           "jsr:@std/fs@^1.0.22",
           "jsr:@std/path@^1.1.4"
-        ]
-      },
-      "testing": {
-        "dependencies": [
-          "jsr:@kuusi/kuusi@0.3"
         ]
       },
       "tests": {

@@ -1,3 +1,9 @@
+/**
+ * Some utilities
+ *
+ * @module
+ */
+
 import type { Route } from "./types.ts";
 
 export type MaybePromise<T> = T | Promise<T>;

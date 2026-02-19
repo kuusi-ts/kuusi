@@ -1,5 +1,6 @@
 /**
- * kuusi: Se ei ole Oak-viittaus. A simple router / library / framework for Deno utilizing file-based routing.
+ * kuusi: Se ei ole Oak-viittaus. A simple router / library / framework for
+ * Deno utilizing file-based routing.
  *
  * ~> `routes/index.source.ts`
  * ```ts
@@ -113,8 +114,8 @@ export async function getKuusiRoutes(): Promise<Route[]> {
   const duplicate = getDuplicate(parsedURLs)[0];
 
   if (duplicate) {
-    const first = routes[duplicate.indexOf(duplicate)][0].pathname;
-    const last = routes[duplicate.lastIndexOf(duplicate)][0].pathname;
+    const first = routes[parsedURLs.indexOf(duplicate)][0].pathname;
+    const last = routes[parsedURLs.lastIndexOf(duplicate)][0].pathname;
     throw new Error(
       `kuusi-duplicate-routes: ${first} and ${last} share the same URL.`,
     );
