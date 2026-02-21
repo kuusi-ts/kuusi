@@ -1,6 +1,10 @@
 /**
+ * @module
+ *
  * kuusi: Se ei ole Oak-viittaus. A simple router / library / framework for
  * Deno utilizing file-based routing.
+ *
+ * @example Basic usage
  *
  * ~> `routes/index.source.ts`
  * ```ts
@@ -36,8 +40,6 @@
  *   },
  * );
  * ```
- *
- * @module
  */
 
 import { walkSync } from "@std/fs";
@@ -75,28 +77,28 @@ export async function getKuusiRoutes(): Promise<Route[]> {
       toFileUrl(join(Deno.cwd(), kuusiConfig.routes.path, path)).href;
     const imports = await import(absolutePath) as object;
 
-    if (/.\.source\.(m|c)?(j|t)s$/.exec(path)) {
+    if (path.match(/.\.source\.(m|c)?(j|t)s$/)) {
       if (!("default" in imports)) {
         throw new Error(
-          `kuusi-no-route-export: ${absolutePath} does not provide a source export`,
+          `kuusi-no-route-export: ${absolutePath} does not provide a default export`,
         );
       }
 
       if (!(imports.default instanceof WebSource)) {
         throw new Error(
-          `kuusi-no-valid-source: ${absolutePath} does not provide a valid source export`,
+          `kuusi-no-source-export: ${absolutePath} does not provide a source export`,
         );
       }
-    } else if (/.\.hook\.(m|c)?(j|t)s$/.exec(path)) {
+    } else if (path.match(/.\.hook\.(m|c)?(j|t)s$/)) {
       if (!("default" in imports)) {
         throw new Error(
-          `kuusi-no-route-export: ${absolutePath} does not provide a webhook export`,
+          `kuusi-no-route-export: ${absolutePath} does not provide a default export`,
         );
       }
 
       if (!(imports.default instanceof WebHook)) {
         throw new Error(
-          `kuusi-no-valid-webhook: ${absolutePath} does not provide a valid webhook export`,
+          `kuusi-no-hook-export: ${absolutePath} does not provide a webhook export`,
         );
       }
     } else continue; // Will never run

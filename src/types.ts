@@ -7,8 +7,8 @@
 import type { MaybePromise } from "./utils.ts";
 
 /**
- * Type that holds a URLPattern and a Route. Used to combine the path of a
- * `Route` with the `Route` itself.
+ * Type that holds a URLPattern and either a `WebSource` or a `WebHook`. Used
+ * to combine the path of a route with the route itself.
  */
 export type Route = [URLPattern, WebSource | WebHook];
 
