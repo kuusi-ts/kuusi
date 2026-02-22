@@ -9,3 +9,7 @@
 - Fixed auto generated documentation on [JSR](https://jsr.io/@kuusi/kuusi)
 - Extended `README.md` and other information files.
   - Started writing additional documentation in `DOCS.md`.
+
+### `0.4.3`
+
+- Fixed auto-documentation bugs on the JSR page.

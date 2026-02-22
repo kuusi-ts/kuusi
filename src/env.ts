@@ -1,4 +1,6 @@
 /**
+ * @module env
+ *
  * This module contains env and dotenv exports. Whether the dotenv variables should be included in the env object can be configured in the `kuusi.config.ts` file.
  *
  * @example
@@ -27,8 +29,6 @@
  *   spruce: "kuusi",
  * });
  * ```
- *
- * @module
  */
 
 import { load } from "@std/dotenv";

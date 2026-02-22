@@ -1,7 +1,7 @@
 /**
- * Some utilities
+ * @module utilities
  *
- * @module
+ * Some utilities
  */
 
 import type { Route } from "./types.ts";
@@ -16,9 +16,6 @@ export const httpVerbs: string[] = [
   "DELETE",
   "OPTIONS",
 ] as const;
-
-// export const ObjectKeysof = <T extends object>(obj: T) =>
-//   Object.keys(obj) as (keyof T)[];
 
 export const ObjectEntriesof = <T extends object>(obj: T) =>
   Object.entries(obj) as [keyof T, T[keyof T]][];

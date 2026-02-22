@@ -1,6 +1,4 @@
 /**
- * @module
- *
  * kuusi: Se ei ole Oak-viittaus. A simple router / library / framework for
  * Deno utilizing file-based routing.
  *
@@ -40,6 +38,8 @@
  *   },
  * );
  * ```
+ *
+ * @module
  */
 
 import { walkSync } from "@std/fs";

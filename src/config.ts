@@ -1,7 +1,7 @@
 /**
- * This module exports all the tools required for the user to configure kuusi.
+ * @module config
  *
- * @module
+ * This module exports all the tools required for the user to configure kuusi.
  */
 
 /*
