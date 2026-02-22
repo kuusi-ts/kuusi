@@ -30,9 +30,8 @@ This piece of documentation aims to not repeat what is already said in the JSDoc
 
 ## kuusi-invalid-kuusi-config
 
-~> `config.ts`.
-
 ```ts
+// ~> `config.ts`.
 new Error(
   "kuusi-invalid-kuusi-config: the exported kuusiConfig should be of type `KuusiConfig`",
 );
@@ -42,9 +41,8 @@ Thrown when the configuration of kuusi given contains illegal fields. A field is
 
 ## kuusi-no-routes-directory
 
-~> `config.ts`
-
 ```ts
+// ~> `config.ts`.
 throw new Error(
   "kuusi-no-routes-directory: The routes directory does not exist.",
 );
@@ -54,9 +52,8 @@ Thrown when the directory that should contain the routes does not exist.
 
 ## kuusi-missing-dotenv-key
 
-~> `env.ts`
-
 ```ts
+// ~> `env.ts`
 throw new Error(
   `kuusi-missing-dotenv-key: Missing dotenv variable "${notFound}"`,
 );
@@ -69,6 +66,7 @@ Thrown when the dotenv file is missing one or more required keys specified in th
 ~> `mod.ts`
 
 ```ts
+// ~> `mod.ts`
 throw new Error(
   `kuusi-no-route-export: ${absolutePath} does not provide a default export`,
 );
@@ -78,9 +76,8 @@ Thrown when the file at `absolutePath` does not provide a default export.
 
 ## kuusi-no-source-export
 
-~> `mod.ts`
-
 ```ts
+// ~> `mod.ts`
 throw new Error(
   `kuusi-no-source-export: ${absolutePath} does not provide a websource export`,
 );
@@ -90,9 +87,8 @@ Thrown when the `.source.ts` file at `absolutePath` does not provide a (valid) w
 
 ## kuusi-no-hook-export
 
-~> `mod.ts`
-
 ```ts
+// ~> `mod.ts`
 throw new Error(
   `kuusi-no-hook-export: ${absolutePath} does not provide a wehook export`,
 );
@@ -102,9 +98,8 @@ Thrown when the `.hook.ts` file at `absolutePath` does not provide a (valid) web
 
 ## kuusi-duplicate-routes
 
-~> `mod.ts`
-
 ```ts
+// ~> `mod.ts`
 throw new Error(
   `kuusi-duplicate-routes: ${first} and ${last} share the same URL.`,
 );
@@ -120,9 +115,8 @@ Thrown when the URL's of the routes at `first` and `last` are the same.
 
 ## kuusi-ambiguous-url
 
-~> `mod.ts`
-
 ```ts
+// ~> `mod.ts`
 console.warn(
   `kuusi-ambiguous-url: "${ambiguousURL}" and "${ambiguousURL}/" are very similar. Consider renaming at least one of them.`,
 );
