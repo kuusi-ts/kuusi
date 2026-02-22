@@ -36,12 +36,18 @@ import { existsSync } from "@std/fs";
 import { join } from "@std/path";
 import { kuusiConfig } from "./config.ts";
 
-/** An object containing all environment variables in a `.env` file. */
+/**
+ * Object containing all variables from a `.env` file.
+ * For configuring this variable, see the docs.
+ */
 const dotenv: Record<string, string> = await load({
   envPath: kuusiConfig.dotenv.path,
   export: kuusiConfig.dotenv.export,
 });
-/** An object containing all environment variables, including those in a potential `.env` file. */
+/**
+ * Object containing all environment variables.
+ * For configuring this variable, see the docs.
+ */
 const env: Record<string, string> = Deno.env.toObject();
 
 if (existsSync(join(Deno.cwd(), kuusiConfig.dotenv.templatePath))) {

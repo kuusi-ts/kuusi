@@ -32,7 +32,7 @@ const defaultKuusiConfig: RequiredKuusiConfig = {
 };
 
 const invalidKuusiConfig = new Error(
-  "invalid-kuusi-config: the exported kuusiConfig should be of type `KuusiConfig`",
+  "kuusi-invalid-kuusi-config: the exported kuusiConfig should be of type `KuusiConfig`",
 );
 
 // This guard should be updated when new config options have been added.
@@ -55,9 +55,10 @@ function kuusiConfigGuard(maybeValidConfig: unknown): KuusiConfig {
     "dotenv" in maybeValidConfig &&
     typeof maybeValidConfig.dotenv === "object" &&
     maybeValidConfig.dotenv !== null &&
-    Object.entries(maybeValidConfig.dotenv).find(([key, value]) =>
-      !isObjField(key, value, defaultKuusiConfig.dotenv)
-    )
+    Object.entries(maybeValidConfig.dotenv)
+      .find(([key, value]) =>
+        !isObjField(key, value, defaultKuusiConfig.dotenv)
+      )
   ) throw invalidKuusiConfig;
 
   // Checks all the fields in routes
