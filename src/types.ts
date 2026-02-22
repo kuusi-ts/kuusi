@@ -156,13 +156,13 @@ export type WebHookTrigger = () => MaybePromise<void>;
  */
 type KuusiRoutesConfig = {
   /**
-   * @property {string | undefined} path? The path to the directory that holds the
-   * routes. Defaults to `routes/`.
+   * @property {string | undefined} path? The path to the directory that holds
+   * the routes. Defaults to `routes/`.
    */
   path?: string;
   /**
-   * @property {boolean | undefined} warnAmbiguousRoutes? Whether a warning should be
-   * shown when two url's only differ by a trailing forwardslash.
+   * @property {boolean | undefined} warnAmbiguousRoutes? Whether a warning
+   * should be shown when two url's only differ by a trailing forwardslash.
    */
   warnAmbiguousRoutes?: boolean;
 };
@@ -172,19 +172,19 @@ type KuusiRoutesConfig = {
  */
 type KuusiDotenvConfig = {
   /**
-   * @property {string | undefined} path? The path to the template dotenv file that
-   * will be loaded. The template dotenv file contains all keys that the dotenv
-   * file must contain. Defaults to `template.env`.
+   * @property {string | undefined} path? The path to the dotenv file that will
+   * be loaded. Defaults to `template.env`.
    */
   path?: string;
   /**
-   * @property {string | undefined} templatePath? The path to the dotenv file that will
-   * be loaded. Defaults to `.env`.
+   * @property {string | undefined} templatePath? The path to the template
+   * dotenv file that will be loaded. The template dotenv file contains all
+   * keys that the dotenv file must contain. Defaults to `.env`.
    */
   templatePath?: string;
   /**
-   * @property {boolean | undefined} export? Whether the dotenv variables should also
-   * be included in the env variables. Defaults to `false`.
+   * @property {boolean | undefined} export? Whether the dotenv variables
+   * should also be included in the env variables. Defaults to `false`.
    */
   export?: boolean;
 };
@@ -197,11 +197,13 @@ type KuusiDotenvConfig = {
  */
 export type KuusiConfig = {
   /**
-   * @property {KuusiRoutesConfig | undefined} routes? The route configuration options.
+   * @property {KuusiRoutesConfig | undefined} routes? The route configuration
+   * options.
    */
   routes?: KuusiRoutesConfig;
   /**
-   * @property {KuusiDotenvConfig | undefined} dotenv? The dotenv configuration options.
+   * @property {KuusiDotenvConfig | undefined} dotenv? The dotenv configuration
+   * options.
    */
   dotenv?: KuusiDotenvConfig;
 };
@@ -211,11 +213,13 @@ export type KuusiConfig = {
  */
 export type RequiredKuusiConfig = {
   /**
-   * @property {Required<KuusiRoutesConfig>} routes The route configuration options.
+   * @property {Required<KuusiRoutesConfig>} routes The route configuration
+   * options.
    */
   routes: Required<KuusiRoutesConfig>;
   /**
-   * @property {Required<KuusiDotenvConfig>} dotenv The dotenv configuration options.
+   * @property {Required<KuusiDotenvConfig>} dotenv The dotenv configuration
+   * options.
    */
   dotenv: Required<KuusiDotenvConfig>;
 };

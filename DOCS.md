@@ -2,20 +2,33 @@
 
 Table of contents:
 
-- A Short Note
-- Errors
-- Warnings
-- Configuration
+- [A Short Note](#a-short-note)
+- [Errors](#errors)
+  - [`kuusi-invalid-kuusi-config`](#kuusi-invalid-kuusi-config)
+  - [`kuusi-no-routes-directory`](#kuusi-no-routes-directory)
+  - [`kuusi-missing-dotenv-key`](#kuusi-missing-dotenv-key)
+  - [`kuusi-no-route-export`](#kuusi-no-route-export)
+  - [`kuusi-no-source-export`](#kuusi-no-source-export)
+  - [`kuusi-no-hook-export`](#kuusi-no-hook-export)
+  - [`kuusi-duplicate-routes`](#kuusi-duplicate-routes)
+- [Warnings](#warnings)
+  - [`kuusi-ambiguous-url`](#kuusi-ambiguous-url)
+- [Configuration](#configuration)
+  - [`routes`](#routes)
+    - [`path`](#path)
+    - [`warnAmbiguousRoutes`](#warnambiguousroutes)
+  - [`dotenv`](#dotenv)
+    - [`path`](#path)
+    - [`templatePath`](#templatepath)
+    - [`export`](#export)
 
 # A Short Note
 
-This piece of documentation aims to not repeat what is already said in the JSDoc
-comments in the source code. If you suspect that some documentation may be
-missing, check that first before opening an issue.
+This piece of documentation aims to not repeat what is already said in the JSDoc comments in the source code. If you suspect that some documentation may be missing, check that first before opening an issue.
 
 # Errors
 
-## `kuusi-invalid-kuusi-config`
+## kuusi-invalid-kuusi-config
 
 ~> `config.ts`.
 
@@ -27,7 +40,7 @@ new Error(
 
 Thrown when the configuration of kuusi given contains illegal fields. A field is illegal if it is not on the type `KuusiConfig`.
 
-## `kuusi-no-routes-directory`
+## kuusi-no-routes-directory
 
 ~> `config.ts`
 
@@ -39,7 +52,7 @@ throw new Error(
 
 Thrown when the directory that should contain the routes does not exist.
 
-## `kuusi-missing-dotenv-key`
+## kuusi-missing-dotenv-key
 
 ~> `env.ts`
 
@@ -51,7 +64,7 @@ throw new Error(
 
 Thrown when the dotenv file is missing one or more required keys specified in the template dotenv file.
 
-## `kuusi-no-route-export`
+## kuusi-no-route-export
 
 ~> `mod.ts`
 
@@ -63,7 +76,7 @@ throw new Error(
 
 Thrown when the file at `absolutePath` does not provide a default export.
 
-## `kuusi-no-source-export`
+## kuusi-no-source-export
 
 ~> `mod.ts`
 
@@ -75,7 +88,7 @@ throw new Error(
 
 Thrown when the `.source.ts` file at `absolutePath` does not provide a (valid) websource export.
 
-## `kuusi-no-hook-export`
+## kuusi-no-hook-export
 
 ~> `mod.ts`
 
@@ -87,7 +100,7 @@ throw new Error(
 
 Thrown when the `.hook.ts` file at `absolutePath` does not provide a (valid) webhook export.
 
-## `kuusi-duplicate-routes`
+## kuusi-duplicate-routes
 
 ~> `mod.ts`
 
@@ -105,7 +118,7 @@ Thrown when the URL's of the routes at `first` and `last` are the same.
 
 # Warnings
 
-## `kuusi-ambiguous-url`
+## kuusi-ambiguous-url
 
 ~> `mod.ts`
 
@@ -140,6 +153,66 @@ export default config;
 
 Notice that not all fields have to be specified, a completely empty `config` is also valid. All configuration options are categorized into objects. Here is a list of those objects and the fields they contain.
 
-## `routes`
+## routes
 
-## `dotenv`
+### path
+
+```ts
+const config: KuusiConfig = {
+  routes: {
+    path: "routes/",
+  },
+};
+```
+
+Configures the path to the directory that holds the routes. Defaults to `routes/`.
+
+### warnAmbiguousRoutes
+
+```ts
+const config: KuusiConfig = {
+  routes: {
+    warnAmbiguousRoutes: false,
+  },
+};
+```
+
+Configures whether a warning should be shown when two url's only differ by a trailing forwardslash.
+
+## dotenv
+
+### path
+
+```ts
+const config: KuusiConfig = {
+  dotenv: {
+    path: ".env",
+  },
+};
+```
+
+Configures the path to the dotenv file that will be loaded. Defaults to `.env`.
+
+### templatePath
+
+```ts
+const config: KuusiConfig = {
+  dotenv: {
+    templatePath: "template.env",
+  },
+};
+```
+
+Configures the path to the template dotenv file that will be loaded. The template dotenv file contains all keys that the dotenv file must contain. Defaults to `template.env`.
+
+### export
+
+```ts
+const config: KuusiConfig = {
+  dotenv: {
+    export: false,
+  },
+};
+```
+
+Configures whether the dotenv variables should also be included in the env variables. Defaults to `false`.
