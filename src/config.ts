@@ -45,9 +45,8 @@ function kuusiConfigGuard(maybeValidConfig: unknown): KuusiConfig {
 
   // Checks all the base fields
   if (
-    Object.entries(maybeValidConfig).find(([key, value]) =>
-      !isObjField(key, value, defaultKuusiConfig)
-    )
+    Object.entries(maybeValidConfig)
+      .find(([key, value]) => !isObjField(key, value, defaultKuusiConfig))
   ) throw invalidKuusiConfig;
 
   // Checks all the fields in dotenv

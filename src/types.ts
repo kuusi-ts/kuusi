@@ -106,7 +106,7 @@ export interface WebHookMethods extends WebSourceMethods {
 export type WebHookTrigger = () => MaybePromise<void>;
 
 /** Type holding the routes configuration options. */
-type KuusiRoutesConfig = {
+interface KuusiRoutesConfig {
   /**
    * The path to the directory that holds the routes. Defaults to `routes/`.
    */
@@ -116,10 +116,10 @@ type KuusiRoutesConfig = {
    * forwardslash.
    */
   warnAmbiguousRoutes?: boolean;
-};
+}
 
 /** Type holding the dotenv and env options. */
-type KuusiDotenvConfig = {
+interface KuusiDotenvConfig {
   /**
    * The path to the dotenv file that will be loaded. Defaults to
    * `template.env`.
@@ -136,25 +136,26 @@ type KuusiDotenvConfig = {
    * Defaults to `false`.
    */
   export?: boolean;
-};
+}
 
 /**
  * Type holding all the fields of `KuusiConfig` with all its fields set to
  * optional, even all the fields of fields that contain objects.
- *
- * Notice `RequiredKuusiConfig !== Required<KuusiConfig>`
  */
-export type KuusiConfig = {
+export interface KuusiConfig {
   /** The route configurationoptions. */
   routes?: KuusiRoutesConfig;
   /** The dotenv configuration options. */
   dotenv?: KuusiDotenvConfig;
-};
+}
 
-/** Type holding the configgable options for kuusi. */
-export type RequiredKuusiConfig = {
+/**
+ * Type holding the configgable options for kuusi.
+ * Notice `RequiredKuusiConfig !== Required<KuusiConfig>`
+ */
+export interface RequiredKuusiConfig {
   /** The route configuration options. */
   routes: Required<KuusiRoutesConfig>;
   /** The dotenv configuration options. */
   dotenv: Required<KuusiDotenvConfig>;
-};
+}

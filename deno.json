@@ -1,10 +1,5 @@
 {
   "nodeModulesDir": "auto",
-  "imports": {
-    "@std/dotenv": "jsr:@std/dotenv@^0.225.6",
-    "@std/fs": "jsr:@std/fs@^1.0.22",
-    "@std/path": "jsr:@std/path@^1.1.4"
-  },
   "workspace": ["./src/", "./example", "./tests"],
   "lint": {
     "rules": {
