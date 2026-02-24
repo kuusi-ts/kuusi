@@ -43,7 +43,7 @@
  */
 
 import { walkSync } from "@std/fs";
-import { join, relative, toFileUrl } from "@std/path";
+import { relative } from "@std/path";
 import { kuusiConfig } from "./config.ts";
 import { type Route, WebHook, WebSource } from "./types.ts";
 import {
@@ -51,6 +51,7 @@ import {
   getDuplicate,
   httpVerbs,
   parsePath,
+  toLocalPath,
   unwrap,
 } from "./utils.ts";
 
@@ -73,8 +74,7 @@ export async function getKuusiRoutes(): Promise<Route[]> {
   for (const path of paths) {
     if (!/.\.(source|hook)\.(m|c)?(j|t)s$/.exec(path)) continue;
 
-    const absolutePath =
-      toFileUrl(join(Deno.cwd(), kuusiConfig.routes.path, path)).href;
+    const absolutePath = toLocalPath(kuusiConfig.routes.path, path).href;
     const imports = await import(absolutePath) as object;
 
     if (path.match(/.\.source\.(m|c)?(j|t)s$/)) {

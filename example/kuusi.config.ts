@@ -2,7 +2,7 @@ import type { KuusiConfig } from "@kuusi/kuusi";
 
 const config: KuusiConfig = {
   routes: {
-    path: "customRoutesDir/",
+    path: "customRoutesDir",
     warnAmbiguousRoutes: true,
   },
   dotenv: {

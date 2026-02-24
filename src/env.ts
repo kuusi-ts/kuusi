@@ -33,8 +33,8 @@
 
 import { load } from "@std/dotenv";
 import { existsSync } from "@std/fs";
-import { join } from "@std/path";
 import { kuusiConfig } from "./config.ts";
+import { toLocalPath } from "./utils.ts";
 
 /**
  * Object containing all variables from a `.env` file.
@@ -50,7 +50,7 @@ const dotenv: Record<string, string> = await load({
  */
 const env: Record<string, string> = Deno.env.toObject();
 
-if (existsSync(join(Deno.cwd(), kuusiConfig.dotenv.templatePath))) {
+if (existsSync(toLocalPath(kuusiConfig.dotenv.templatePath).pathname)) {
   const templateDotenv = await load({
     envPath: kuusiConfig.dotenv.templatePath,
     export: kuusiConfig.dotenv.export,

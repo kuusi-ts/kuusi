@@ -18,3 +18,8 @@
 
 - Fixed auto-documentation bugs on the JSR page.
 - Re-added the `README.md` that was gone for some reason.
+
+### `0.4.4`
+
+- Fixed the importing of `kuusi.config.ts` not working at all.
+- Fixed most of the quirkyness of `config.ts`.
