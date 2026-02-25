@@ -33,7 +33,6 @@ export class WebSource implements WebSourceMethods {
   /** The method serving the OPTIONS method of this `WebSource`. */
   readonly OPTIONS?: WebSourceMethod;
 
-  /** Puts all the assigned methods on the class. */
   constructor(obj: WebSourceMethods) {
     this.OPTIONS = () => new Response(JSON.stringify(Object.entries(this)));
     Object.assign(this, obj);
@@ -81,7 +80,6 @@ export class WebHook extends WebSource {
   /** The method that triggers the webhook. */
   readonly trigger: WebHookTrigger;
 
-  /** Puts all the assigned methods on the class. */
   constructor(obj: WebHookMethods) {
     super(obj);
     this.trigger = obj.trigger;
@@ -136,6 +134,11 @@ interface KuusiDotenvConfig {
    * Defaults to `false`.
    */
   export?: boolean;
+  /**
+   * A string of required dotenv keys. Will neither override the required keys from
+   * the template dotenv, nor get overridden by the template dotenv. Defaults to `[]`.
+   */
+  requiredKeys?: string[];
 }
 
 /**

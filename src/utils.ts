@@ -4,6 +4,7 @@
  * Some utilities
  */
 
+import { join, toFileUrl } from "@std/path";
 import type { Route } from "./types.ts";
 
 export type MaybePromise<T> = T | Promise<T>;
@@ -63,3 +64,6 @@ export const getAmbiguousURLs = (routes: Route[]) =>
       url.pathname.endsWith("/") ? url.pathname.slice(0, -1) : url.pathname
     ),
   );
+
+export const toLocalPath = (...path: string[]) =>
+  toFileUrl(join(Deno.cwd(), ...path));

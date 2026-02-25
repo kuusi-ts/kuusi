@@ -33,8 +33,13 @@
 
 import { load } from "@std/dotenv";
 import { existsSync } from "@std/fs";
-import { join } from "@std/path";
 import { kuusiConfig } from "./config.ts";
+import { toLocalPath } from "./utils.ts";
+
+const missingDotenvKey = (key: string) =>
+  new Error(
+    `kuusi-missing-dotenv-key: Missing dotenv variable "${key}"`,
+  );
 
 /**
  * Object containing all variables from a `.env` file.
@@ -50,7 +55,15 @@ const dotenv: Record<string, string> = await load({
  */
 const env: Record<string, string> = Deno.env.toObject();
 
-if (existsSync(join(Deno.cwd(), kuusiConfig.dotenv.templatePath))) {
+if (kuusiConfig.dotenv.requiredKeys.length !== 0) {
+  const notFound = kuusiConfig.dotenv.requiredKeys.find((key) =>
+    !(key in dotenv)
+  );
+
+  if (notFound) throw missingDotenvKey(notFound);
+}
+
+if (existsSync(toLocalPath(kuusiConfig.dotenv.templatePath).pathname)) {
   const templateDotenv = await load({
     envPath: kuusiConfig.dotenv.templatePath,
     export: kuusiConfig.dotenv.export,
@@ -58,11 +71,7 @@ if (existsSync(join(Deno.cwd(), kuusiConfig.dotenv.templatePath))) {
 
   const notFound = Object.keys(templateDotenv).find((key) => !(key in dotenv));
 
-  if (notFound) {
-    throw new Error(
-      `kuusi-missing-dotenv-key: Missing dotenv variable "${notFound}"`,
-    );
-  }
+  if (notFound) throw missingDotenvKey(notFound);
 }
 
 export { dotenv, env };

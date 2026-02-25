@@ -43,9 +43,7 @@ Thrown when the configuration of kuusi given contains illegal fields. A field is
 
 ```ts
 // ~> `config.ts`.
-throw new Error(
-  "kuusi-no-routes-directory: The routes directory does not exist.",
-);
+new Error("kuusi-no-routes-directory: The routes directory does not exist.");
 ```
 
 Thrown when the directory that should contain the routes does not exist.
@@ -54,9 +52,7 @@ Thrown when the directory that should contain the routes does not exist.
 
 ```ts
 // ~> `env.ts`
-throw new Error(
-  `kuusi-missing-dotenv-key: Missing dotenv variable "${notFound}"`,
-);
+new Error(`kuusi-missing-dotenv-key: Missing dotenv variable "${notFound}"`);
 ```
 
 Thrown when the dotenv file is missing one or more required keys specified in the template dotenv file.
@@ -67,7 +63,7 @@ Thrown when the dotenv file is missing one or more required keys specified in th
 
 ```ts
 // ~> `mod.ts`
-throw new Error(
+new Error(
   `kuusi-no-route-export: ${absolutePath} does not provide a default export`,
 );
 ```
@@ -78,7 +74,7 @@ Thrown when the file at `absolutePath` does not provide a default export.
 
 ```ts
 // ~> `mod.ts`
-throw new Error(
+new Error(
   `kuusi-no-source-export: ${absolutePath} does not provide a websource export`,
 );
 ```
@@ -89,7 +85,7 @@ Thrown when the `.source.ts` file at `absolutePath` does not provide a (valid) w
 
 ```ts
 // ~> `mod.ts`
-throw new Error(
+new Error(
   `kuusi-no-hook-export: ${absolutePath} does not provide a wehook export`,
 );
 ```
@@ -100,8 +96,8 @@ Thrown when the `.hook.ts` file at `absolutePath` does not provide a (valid) web
 
 ```ts
 // ~> `mod.ts`
-throw new Error(
-  `kuusi-duplicate-routes: ${first} and ${last} share the same URL.`,
+new Error(
+  `kuusi-duplicate-routes: The "${duplicate}" URL is served multiple times.`,
 );
 ```
 
@@ -118,7 +114,7 @@ Thrown when the URL's of the routes at `first` and `last` are the same.
 ```ts
 // ~> `mod.ts`
 console.warn(
-  `kuusi-ambiguous-url: "${ambiguousURL}" and "${ambiguousURL}/" are very similar. Consider renaming at least one of them.`,
+  `kuusi-ambiguous-url: The routes "${ambiguousURL}" and "${ambiguousURL}/" are very similar. Consider renaming at least one of them.`,
 );
 ```
 

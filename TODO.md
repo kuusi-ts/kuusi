@@ -6,7 +6,7 @@
   - Kuusi config option?
   - Route config option seems best
 - ? Implement a standard way to handle databases
-  - May be too difficult, as I have too little experience with anything other tha sqlite3
+  - May be too difficult, as I have too little experience with anything other than sqlite3
 
 ## Already done list
 

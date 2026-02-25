@@ -43,7 +43,7 @@
  */
 
 import { walkSync } from "@std/fs";
-import { join, relative, toFileUrl } from "@std/path";
+import { relative } from "@std/path";
 import { kuusiConfig } from "./config.ts";
 import { type Route, WebHook, WebSource } from "./types.ts";
 import {
@@ -51,6 +51,7 @@ import {
   getDuplicate,
   httpVerbs,
   parsePath,
+  toLocalPath,
   unwrap,
 } from "./utils.ts";
 
@@ -73,8 +74,7 @@ export async function getKuusiRoutes(): Promise<Route[]> {
   for (const path of paths) {
     if (!/.\.(source|hook)\.(m|c)?(j|t)s$/.exec(path)) continue;
 
-    const absolutePath =
-      toFileUrl(join(Deno.cwd(), kuusiConfig.routes.path, path)).href;
+    const absolutePath = toLocalPath(kuusiConfig.routes.path, path).href;
     const imports = await import(absolutePath) as object;
 
     if (path.match(/.\.source\.(m|c)?(j|t)s$/)) {
@@ -116,17 +116,15 @@ export async function getKuusiRoutes(): Promise<Route[]> {
   const duplicate = getDuplicate(parsedURLs)[0];
 
   if (duplicate) {
-    const first = routes[parsedURLs.indexOf(duplicate)][0].pathname;
-    const last = routes[parsedURLs.lastIndexOf(duplicate)][0].pathname;
     throw new Error(
-      `kuusi-duplicate-routes: ${first} and ${last} share the same URL.`,
+      `kuusi-duplicate-routes: The "${duplicate}" URL is served multiple times.`,
     );
   }
 
   if (kuusiConfig.routes.warnAmbiguousRoutes) {
     for (const ambiguousURL of getAmbiguousURLs(routes)) {
       console.warn(
-        `kuusi-ambiguous-url: "${ambiguousURL}" and "${ambiguousURL}/" are very similar. Consider renaming at least one of them.`,
+        `kuusi-ambiguous-url: The routes "${ambiguousURL}" and "${ambiguousURL}/" are very similar. Consider renaming at least one of them.`,
       );
     }
   }
