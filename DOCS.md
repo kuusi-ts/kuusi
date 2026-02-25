@@ -96,7 +96,9 @@ Thrown when the `.hook.ts` file at `absolutePath` does not provide a (valid) web
 
 ```ts
 // ~> `mod.ts`
-new Error(`kuusi-duplicate-routes: ${first} and ${last} share the same URL.`);
+new Error(
+  `kuusi-duplicate-routes: The "${duplicate}" URL is served multiple times.`,
+);
 ```
 
 Thrown when the URL's of the routes at `first` and `last` are the same.
@@ -112,7 +114,7 @@ Thrown when the URL's of the routes at `first` and `last` are the same.
 ```ts
 // ~> `mod.ts`
 console.warn(
-  `kuusi-ambiguous-url: "${ambiguousURL}" and "${ambiguousURL}/" are very similar. Consider renaming at least one of them.`,
+  `kuusi-ambiguous-url: The routes "${ambiguousURL}" and "${ambiguousURL}/" are very similar. Consider renaming at least one of them.`,
 );
 ```
 

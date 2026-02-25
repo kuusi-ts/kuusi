@@ -38,7 +38,7 @@
     "members": {
       "example": {
         "dependencies": [
-          "jsr:@kuusi/kuusi@~0.4.4"
+          "jsr:@kuusi/kuusi@~0.4.4-alpha"
         ]
       },
       "src": {

@@ -116,17 +116,15 @@ export async function getKuusiRoutes(): Promise<Route[]> {
   const duplicate = getDuplicate(parsedURLs)[0];
 
   if (duplicate) {
-    const first = routes[parsedURLs.indexOf(duplicate)][0].pathname;
-    const last = routes[parsedURLs.lastIndexOf(duplicate)][0].pathname;
     throw new Error(
-      `kuusi-duplicate-routes: ${first} and ${last} share the same URL.`,
+      `kuusi-duplicate-routes: The "${duplicate}" URL is served multiple times.`,
     );
   }
 
   if (kuusiConfig.routes.warnAmbiguousRoutes) {
     for (const ambiguousURL of getAmbiguousURLs(routes)) {
       console.warn(
-        `kuusi-ambiguous-url: "${ambiguousURL}" and "${ambiguousURL}/" are very similar. Consider renaming at least one of them.`,
+        `kuusi-ambiguous-url: The routes "${ambiguousURL}" and "${ambiguousURL}/" are very similar. Consider renaming at least one of them.`,
       );
     }
   }

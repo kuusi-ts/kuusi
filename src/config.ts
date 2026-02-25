@@ -17,6 +17,7 @@ const defaultKuusiConfig: RequiredKuusiConfig = {
     path: ".env",
     templatePath: "template.env",
     export: false,
+    requiredKeys: [],
   },
 };
 
@@ -34,8 +35,9 @@ function kuusiConfigGuard(maybeValidConfig: unknown): KuusiConfig {
 
   // Checks all the base fields
   if (
-    Object.entries(maybeValidConfig)
-      .find(([key, value]) => !isObjField(key, value, defaultKuusiConfig))
+    Object.entries(maybeValidConfig).find(([key, value]) =>
+      !isObjField(key, value, defaultKuusiConfig)
+    )
   ) throw invalidKuusiConfig;
 
   // Checks all the fields in dotenv
@@ -57,7 +59,9 @@ function kuusiConfigGuard(maybeValidConfig: unknown): KuusiConfig {
     Object.entries(maybeValidConfig.routes).find(([key, value]) =>
       !isObjField(key, value, defaultKuusiConfig.routes)
     )
-  ) throw invalidKuusiConfig;
+  ) {
+    throw invalidKuusiConfig;
+  }
 
   return maybeValidConfig as KuusiConfig;
 }

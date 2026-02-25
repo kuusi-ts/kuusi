@@ -134,6 +134,11 @@ interface KuusiDotenvConfig {
    * Defaults to `false`.
    */
   export?: boolean;
+  /**
+   * A string of required dotenv keys. Will neither override the required keys from
+   * the template dotenv, nor get overridden by the template dotenv. Defaults to `[]`.
+   */
+  requiredKeys?: string[];
 }
 
 /**

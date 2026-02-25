@@ -9,6 +9,7 @@ const config: KuusiConfig = {
     path: "new.env",
     export: true,
     templatePath: "newTemplate.env",
+    requiredKeys: ["requiredKey"],
   },
 };
 
