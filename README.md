@@ -54,3 +54,7 @@ Deno.serve({ port: 1296 }, async function (req: Request): Promise<Response> {
   return await kuusi(req, routes);
 });
 ```
+
+# Misc
+
+- [Flavortown link](https://flavortown.hackclub.com/projects/10244)
