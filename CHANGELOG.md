@@ -24,3 +24,7 @@
 - Fixed the importing of `kuusi.config.ts` not working at all.
 - Fixed most of the quirkyness of `config.ts`.
 - Added a new config option for required dotenv keys.
+
+### `0.4.5`
+
+- Removed two useless interfaces.

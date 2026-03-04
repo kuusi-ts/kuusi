@@ -19,7 +19,7 @@ export type Route = [URLPattern, WebSource | WebHook];
  *
  * @implements WebHookMethods
  */
-export class WebSource implements WebSourceMethods {
+export class WebSource {
   /** The method serving the GET method of this `WebSource`. */
   readonly GET?: WebSourceMethod;
   /** The method serving the POST method of this `WebSource`. */
@@ -33,32 +33,10 @@ export class WebSource implements WebSourceMethods {
   /** The method serving the OPTIONS method of this `WebSource`. */
   readonly OPTIONS?: WebSourceMethod;
 
-  constructor(obj: WebSourceMethods) {
+  constructor(obj: WebSource) {
     this.OPTIONS = () => new Response(JSON.stringify(Object.entries(this)));
     Object.assign(this, obj);
   }
-}
-
-/**
- * Interface that is implemented by `Route`, and used by said class in the
- * constructor as parameter type. Holds the same properties as `Route`, but
- * they aren't `readonly`.
- *
- * @see WebSource
- */
-export interface WebSourceMethods {
-  /** The method serving the GET method of a `WebSource`. */
-  readonly GET?: WebSourceMethod;
-  /** The method serving the POST method of a `WebSource`. */
-  readonly POST?: WebSourceMethod;
-  /** The method serving the PUT method of a `WebSource`. */
-  readonly PUT?: WebSourceMethod;
-  /** The method serving the PATCH method of a `WebSource`. */
-  readonly PATCH?: WebSourceMethod;
-  /** The method serving the DELETE method of a `WebSource`. */
-  readonly DELETE?: WebSourceMethod;
-  /** The method serving the OPTIONS method of a `WebSource`. */
-  readonly OPTIONS?: WebSourceMethod;
 }
 
 /**
@@ -80,21 +58,10 @@ export class WebHook extends WebSource {
   /** The method that triggers the webhook. */
   readonly trigger: WebHookTrigger;
 
-  constructor(obj: WebHookMethods) {
+  constructor(obj: WebHook) {
     super(obj);
     this.trigger = obj.trigger;
   }
-}
-
-/**
- * Interface that is implemented by `WebSourceMethods`, and is used by
- * `WebSource` as a constructor parameter type.
- *
- * @see WebSourceMethods
- */
-export interface WebHookMethods extends WebSourceMethods {
-  /** The method that triggers the webhook. */
-  readonly trigger: WebHookTrigger;
 }
 
 /**
