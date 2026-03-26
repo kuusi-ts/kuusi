@@ -52,7 +52,6 @@ import {
   httpVerbs,
   parsePath,
   toLocalPath,
-  unwrap,
 } from "./utils.ts";
 
 export * from "./env.ts";
@@ -166,7 +165,7 @@ export async function kuusi(req: Request, routes: Route[]): Promise<Response> {
   }
 
   const [matchPattern, matchRoute] = match;
-  const matchPatternResult = unwrap(matchPattern.exec(req.url));
+  const matchPatternResult = matchPattern.exec(req.url)!;
   const matchMethod = matchRoute?.[req.method as keyof (WebSource | WebHook)];
 
   return matchMethod
