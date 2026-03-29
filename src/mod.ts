@@ -52,6 +52,7 @@ import {
   httpVerbs,
   parsePath,
   toLocalPath,
+  validRouteGuard,
 } from "./utils.ts";
 
 export * from "./env.ts";
@@ -71,7 +72,7 @@ export async function getKuusiRoutes(): Promise<Route[]> {
   const routes: Route[] = [];
 
   for (const path of paths) {
-    if (!/.\.(source|hook)\.(m|c)?(j|t)s$/.exec(path)) continue;
+    if (!validRouteGuard(path)) continue;
 
     const absolutePath = toLocalPath(kuusiConfig.routes.path, path).href;
     const imports = await import(absolutePath) as object;
@@ -88,7 +89,7 @@ export async function getKuusiRoutes(): Promise<Route[]> {
           `kuusi-no-source-export: ${absolutePath} does not provide a source export`,
         );
       }
-    } else if (path.match(/.\.hook\.(m|c)?(j|t)s$/)) {
+    } else if (/.\.hook\.(m|c)?(j|t)s$/.test(path)) {
       if (!("default" in imports)) {
         throw new Error(
           `kuusi-no-route-export: ${absolutePath} does not provide a default export`,
@@ -100,11 +101,11 @@ export async function getKuusiRoutes(): Promise<Route[]> {
           `kuusi-no-hook-export: ${absolutePath} does not provide a webhook export`,
         );
       }
-    } else continue; // Will never run
+    }
 
     routes.push([
       new URLPattern({ pathname: parsePath(path) }),
-      imports.default,
+      (imports as { default: WebSource | WebHook }).default,
     ]);
   }
 

@@ -56,3 +56,6 @@ export const getAmbiguousURLs = (routes: Route[]) =>
 
 export const toLocalPath = (...path: string[]) =>
   toFileUrl(join(Deno.cwd(), ...path));
+
+export const validRouteGuard = (path: string) =>
+  /.\.(source|hook)\.(m|c)?(j|t)s(x)?$/.test(path);
