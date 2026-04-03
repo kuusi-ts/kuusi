@@ -2,7 +2,7 @@
   "nodeModulesDir": "auto",
   "workspace": ["./src/", "./example/", "./tests/"],
   "tasks": {
-    "publish-readme": "cp README.md src/; cd src; deno publish; rm README.md; cd ../"
+    "publish-readme": "cp README.md src/; cd src; deno publish --allow-dirty; rm README.md; cd ../"
   },
   "lint": {
     "rules": {
