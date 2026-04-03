@@ -3,7 +3,7 @@ import { parsePath, validRouteGuard } from "../src/utils.ts";
 import { assertFalse } from "@std/assert/false";
 
 Deno.test({
-  name: "parsePath",
+  name: "Parse Path",
   fn: () => {
     assertEquals(parsePath("index.source.js"), "/");
     assertEquals(parsePath("kuusi/index.source.cjs"), "/kuusi/");
@@ -15,7 +15,7 @@ Deno.test({
 });
 
 Deno.test({
-  name: "Valid route?",
+  name: "Valid route",
   fn: () => {
     assert(validRouteGuard("index.source.ts"));
     assert(validRouteGuard("kuusi.hook.js"));

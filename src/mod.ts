@@ -77,7 +77,7 @@ export async function getKuusiRoutes(): Promise<Route[]> {
     const absolutePath = toLocalPath(kuusiConfig.routes.path, path).href;
     const imports = await import(absolutePath) as object;
 
-    if (path.match(/.\.source\.(m|c)?(j|t)s$/)) {
+    if (/.\.source\.(m|c)?(j|t)s$/.test(path)) {
       if (!("default" in imports)) {
         throw new Error(
           `kuusi-no-route-export: ${absolutePath} does not provide a default export`,

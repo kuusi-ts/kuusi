@@ -125,9 +125,9 @@ Thrown when at least two routes have very URL's that differ by only a trailing f
 Kuusi can easily be configured by making a `kuusi.config.ts` file in your projects root. A basic configuration file could look something like this:
 
 ```ts
-import type { KuusiConfig } from "@kuusi/kuusi";
+import { KuusiConfig } from "@kuusi/kuusi";
 
-const config: KuusiConfig = {
+const config = new KuusiConfig({
   routes: {
     path: "customRoutesDir/",
     warnAmbiguousRoutes: true,
@@ -136,23 +136,23 @@ const config: KuusiConfig = {
     export: true,
     templatePath: "newTemplate.env",
   },
-};
+});
 
 export default config;
 ```
 
-Notice that not all fields have to be specified, a completely empty `config` is also valid. All configuration options are categorized into objects. Here is a list of those objects and the fields they contain.
+Notice that not all fields have to be specified, a completely empty `config` is also valid. All configuration options are categorized into objects. Here is a list of those objects and the fields they contain. Make sure that the configuration is exported as default, and that the configuration is made by calling the `KuusiConfig` constructor.
 
 ## routes
 
 ### path
 
 ```ts
-const config: KuusiConfig = {
+const config = new KuusiConfig({
   routes: {
     path: "routes/",
   },
-};
+});
 ```
 
 Configures the path to the directory that holds the routes. Defaults to `routes/`.
@@ -160,11 +160,11 @@ Configures the path to the directory that holds the routes. Defaults to `routes/
 ### warnAmbiguousRoutes
 
 ```ts
-const config: KuusiConfig = {
+const config = new KuusiConfig({
   routes: {
     warnAmbiguousRoutes: false,
   },
-};
+});
 ```
 
 Configures whether a warning should be shown when two url's only differ by a trailing forwardslash.
@@ -174,11 +174,11 @@ Configures whether a warning should be shown when two url's only differ by a tra
 ### path
 
 ```ts
-const config: KuusiConfig = {
+const config = new KuusiConfig({
   dotenv: {
     path: ".env",
   },
-};
+});
 ```
 
 Configures the path to the dotenv file that will be loaded. Defaults to `.env`.
@@ -186,11 +186,11 @@ Configures the path to the dotenv file that will be loaded. Defaults to `.env`.
 ### templatePath
 
 ```ts
-const config: KuusiConfig = {
+const config = new KuusiConfig({
   dotenv: {
     templatePath: "template.env",
   },
-};
+});
 ```
 
 Configures the path to the template dotenv file that will be loaded. The template dotenv file contains all keys that the dotenv file must contain. Defaults to `template.env`.
@@ -198,11 +198,11 @@ Configures the path to the template dotenv file that will be loaded. The templat
 ### export
 
 ```ts
-const config: KuusiConfig = {
+const config = new KuusiConfig({ 
   dotenv: {
     export: false,
   },
-};
+});
 ```
 
 Configures whether the dotenv variables should also be included in the env variables. Defaults to `false`.

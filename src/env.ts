@@ -66,7 +66,6 @@ if (kuusiConfig.dotenv.requiredKeys.length !== 0) {
 if (existsSync(toLocalPath(kuusiConfig.dotenv.templatePath).pathname)) {
   const templateDotenv = await load({
     envPath: kuusiConfig.dotenv.templatePath,
-    export: kuusiConfig.dotenv.export,
   });
 
   const notFound = Object.keys(templateDotenv).find((key) => !(key in dotenv));

@@ -1,9 +1,8 @@
-import { unwrap } from "$src/utils.ts";
 import { dotenv, WebSource } from "@kuusi/kuusi";
 
 const route = new WebSource({
-  GET: (req, patternResult) => {
-    const id = unwrap(patternResult.pathname.groups.id);
+  GET: (_, patternResult) => {
+    const id = patternResult.pathname.groups.id!;
 
     return new Response(
       JSON.stringify({

@@ -1,6 +1,6 @@
-import type { KuusiConfig } from "@kuusi/kuusi";
+import { KuusiConfig } from "@kuusi/kuusi";
 
-const config: KuusiConfig = {
+const config = new KuusiConfig({
   routes: {
     path: "customRoutesDir",
     warnAmbiguousRoutes: true,
@@ -11,6 +11,6 @@ const config: KuusiConfig = {
     templatePath: "newTemplate.env",
     requiredKeys: ["requiredKey"],
   },
-};
+});
 
 export default config;

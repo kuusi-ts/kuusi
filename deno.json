@@ -1,6 +1,6 @@
 {
   "nodeModulesDir": "auto",
-  "workspace": ["./src/", "./example", "./tests"],
+  "workspace": ["./src/", "./example/", "./tests/"],
   "tasks": {
     "publish-readme": "cp README.md src/; cd src; deno publish; rm README.md; cd ../"
   },
