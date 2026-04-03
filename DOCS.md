@@ -3,6 +3,11 @@
 Table of contents:
 
 - [A Short Note](#a-short-note)
+- [Getting started](#getting-started)
+  - [Install the package](#step-1-install-the-package)
+  - [Make project structure](#step-2-make-project-structure)
+  - [Configure kuusi](#step-3-configure-kuusi)
+  - [Make a webhook](#step-4-make-a-webhook)
 - [Errors](#errors)
   - [`kuusi-invalid-kuusi-config`](#kuusi-invalid-kuusi-config)
   - [`kuusi-no-routes-directory`](#kuusi-no-routes-directory)
@@ -26,18 +31,153 @@ Table of contents:
 
 This piece of documentation aims to not repeat what is already said in the JSDoc comments in the source code. If you suspect that some documentation may be missing, check that first before opening an issue.
 
+# Getting started
+
+Getting started with kuusi is really easy. Here is a comprehensive guide.
+
+## Step 1: Install the package
+
+Installing kuusi can be done with this simple terminal command.
+
+```bash
+deno add jsr:@kuusi/kuusi;
+deno install;
+```
+
+## Step 2: Make project structure
+
+If you have completed step 1, it is time to set a general project structure. First, create a `src/` directory and in it, a file called `index.ts` or `main.ts` (personally, I like the former better). Open `src/index.ts` and copy-paste the following code into it:
+
+~> `src/index.ts`
+
+```ts
+import { getKuusiRoutes, kuusi } from "@kuusi/kuusi";
+
+const routes = await getKuusiRoutes();
+
+Deno.serve({ port: 1296 }, async (req) => {
+  return await kuusi(req, routes);
+});
+```
+
+Now, similar to before, create a `routes` directory and create a `index.source.ts` file in it, and copy-paste the following code:
+
+```ts
+import { WebSource } from "@kuusi/kuusi";
+
+export const route = new WebSource({
+  GET: (req, patternResult) => {
+    return new Response(
+      JSON.stringify({
+        message: "welcome to kuusi!",
+      }),
+      {
+        status: 200,
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+      },
+    );
+  },
+});
+```
+
+This defines a new endpoint at `/`, keep in mind index means its the default route. Other endpoints can be made by replacing `index` with literally anything else. Generic parameters can be made with a colon (:) in the URL (on windows, the colon is a reserved character, so use a semicolon (;) instead). An example would be `:id.source.ts`.
+
+Your app works like it should now (at least, I hope so, this isn't that complicated). All the steps from now on are optional, but might be worth a read.
+
+## Step 3: Configure kuusi
+
+Kuusi can easily be configured by creating a `kuusi.config.ts` file in your projects **root**. In case you forgot, the projects root is where your `deno.json`, `deno.jsonc` or `package.json` is. Keep in mind that although in the rest of kuusi any JS / TS file extension is allowed, the file extension of the configuration file **has** to be `.ts`.
+
+Now place the following code in your newly made `kuusi.config.ts`:
+
+```ts
+import { KuusiConfig } from "@kuusi/kuusi/types";
+
+const config = new KuusiConfig();
+
+export default config;
+```
+
+Important: `KuusiConfig` **has** to be imported from `@kuusi/kuusi/types`, because importing it from `@kuusi/kuusi` results in a triple dependency cycle between your `kuusi.config.ts`, kuusi's `src/config.ts` and kuusi's `src/mod.ts` which all import each other in a closed loop. More on configuring kuusi can be found [here](#configuration).
+
+## Step 4: Make a webhook
+
+Kuusi provides a simple way to make webhooks. Instead of a route file ending in `.source.ts`, you can make it end with `.hook.ts` to make a webhook. A simple webhook would look something like this:
+
+```ts
+import { WebHook } from "@kuusi/kuusi";
+
+const subscribers: string[] = [];
+
+const webHookData = {
+  message: "this is a kuusi webhook",
+  kuusi: 6,
+};
+
+const route = new WebHook({
+  trigger: () => {
+    for (const subscriber of subscribers) {
+      fetch(subscriber, {
+        body: JSON.stringify(webHookData),
+      });
+    }
+  },
+  GET: (req: Request): Response =>
+    new Response(
+      JSON.stringify({
+        message: "hello",
+        request: req,
+      }),
+      {
+        status: 200,
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+      },
+    ),
+  POST: async (req: Request): Promise<Response> => {
+    const body = (await req.json()) as { url?: string };
+
+    if (body.url) subscribers.push(body.url);
+
+    return new Response(
+      JSON.stringify({
+        message: "subscribed!",
+      }),
+      {
+        status: 200,
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+      },
+    );
+  },
+});
+
+export default route;
+```
+
+Notice a couple of differences between a webhook and a websource:
+
+1. Instead of importing the `WebSource` class, we import `WebHook` instead.
+2. A new `trigger` method exists, which contains the logic to trigger the webhook and send data to all of its subscribers. This method can be used on other places to trigger the hook.
+
 # Errors
+
+Sometimes kuusi may tell you that your code sucks and give you an error alongside it, here is what they all mean.
 
 ## kuusi-invalid-kuusi-config
 
 ```ts
 // ~> `config.ts`.
 new Error(
-  "kuusi-invalid-kuusi-config: the exported kuusiConfig should be of type `KuusiConfig`",
+  "kuusi-invalid-kuusi-config: the exported kuusiConfig should be an instance of `KuusiConfig`",
 );
 ```
 
-Thrown when the configuration of kuusi given contains illegal fields. A field is illegal if it is not on the type `KuusiConfig`.
+Thrown when the configuration of kuusi is illegal. This can be either because the configuration you exported wasn't exported as default, because you used the wrong type for the configuration object or because you didn't use the constructor of the `KuusiConfig` class.
 
 ## kuusi-no-routes-directory
 
@@ -46,7 +186,7 @@ Thrown when the configuration of kuusi given contains illegal fields. A field is
 new Error("kuusi-no-routes-directory: The routes directory does not exist.");
 ```
 
-Thrown when the directory that should contain the routes does not exist.
+Thrown when the directory that should contain the routes does not exist. If you think that it does, check whether your routes directory's name contains a typo either in the configuration file or in your file systen.
 
 ## kuusi-missing-dotenv-key
 
@@ -198,7 +338,7 @@ Configures the path to the template dotenv file that will be loaded. The templat
 ### export
 
 ```ts
-const config = new KuusiConfig({ 
+const config = new KuusiConfig({
   dotenv: {
     export: false,
   },

@@ -37,3 +37,4 @@
 ## `1.0.1` 
 
 - Updated inconsistent docs.
+- Added a guide to the docs.

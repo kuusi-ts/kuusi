@@ -20,7 +20,7 @@ if (existsSync(toLocalPath("kuusi.config.ts").pathname)) {
       kuusiConfig = kuusiConfigImport.default;
     } else {
       throw new Error(
-        "kuusi-invalid-kuusi-config: the exported kuusiConfig should be of type `KuusiConfig`",
+        "kuusi-invalid-kuusi-config: the exported kuusiConfig should be an instance of `KuusiConfig`",
       );
     }
   }
