@@ -1,4 +1,4 @@
-import { KuusiConfig } from "@kuusi/kuusi";
+import { KuusiConfig } from "@kuusi/kuusi/types";
 
 const config = new KuusiConfig({
   routes: {

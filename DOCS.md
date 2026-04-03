@@ -125,7 +125,7 @@ Thrown when at least two routes have very URL's that differ by only a trailing f
 Kuusi can easily be configured by making a `kuusi.config.ts` file in your projects root. A basic configuration file could look something like this:
 
 ```ts
-import { KuusiConfig } from "@kuusi/kuusi";
+import { KuusiConfig } from "@kuusi/kuusi/types";
 
 const config = new KuusiConfig({
   routes: {
@@ -141,7 +141,7 @@ const config = new KuusiConfig({
 export default config;
 ```
 
-Notice that not all fields have to be specified, a completely empty `config` is also valid. All configuration options are categorized into objects. Here is a list of those objects and the fields they contain. Make sure that the configuration is exported as default, and that the configuration is made by calling the `KuusiConfig` constructor.
+Notice that not all fields have to be specified, a completely empty `config` is also valid. All configuration options are categorized into objects. Here is a list of those objects and the fields they contain. Make sure that the configuration is exported as default, and that the configuration is made by calling the `KuusiConfig` constructor. The class MUST be imported from `@kuusi/kuusi/types`, importing from `@kuusi/kuusi` will result in a cyclic importing deadlock.
 
 ## routes
 

@@ -4,7 +4,7 @@
  * Module containing all the types kuusi exports.
  */
 
-import type { MaybePromise } from "./utils.ts";
+type MaybePromise<T> = T | Promise<T>;
 
 /**
  * Type that holds a URLPattern and either a `WebSource` or a `WebHook`. Used

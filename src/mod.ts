@@ -58,6 +58,20 @@ import {
 export * from "./env.ts";
 export * from "./types.ts";
 
+function checkDuplicateRoutes(routes: Route[]): void {
+  const parsedURLs = routes.map(([url]) =>
+    url.pathname.replace(/\/:[^\/]+(?!=\/)/g, "®")
+  );
+
+  const duplicate = getDuplicate(parsedURLs)[0];
+
+  if (duplicate) {
+    throw new Error(
+      `kuusi-duplicate-routes: The "${duplicate}" URL is served multiple times.`,
+    );
+  }
+}
+
 /**
  * Function that collects all the routes from the routes directory.
  *
@@ -77,49 +91,33 @@ export async function getKuusiRoutes(): Promise<Route[]> {
     const absolutePath = toLocalPath(kuusiConfig.routes.path, path).href;
     const imports = await import(absolutePath) as object;
 
-    if (/.\.source\.(m|c)?(j|t)s$/.test(path)) {
-      if (!("default" in imports)) {
-        throw new Error(
-          `kuusi-no-route-export: ${absolutePath} does not provide a default export`,
-        );
-      }
+    if (!("default" in imports)) {
+      throw new Error(
+        `kuusi-no-route-export: ${absolutePath} does not provide a default export`,
+      );
+    }
 
+    if (/.\.source/.test(path)) {
       if (!(imports.default instanceof WebSource)) {
         throw new Error(
           `kuusi-no-source-export: ${absolutePath} does not provide a source export`,
         );
       }
-    } else if (/.\.hook\.(m|c)?(j|t)s$/.test(path)) {
-      if (!("default" in imports)) {
-        throw new Error(
-          `kuusi-no-route-export: ${absolutePath} does not provide a default export`,
-        );
-      }
-
+    } else if (/.\.hook/.test(path)) {
       if (!(imports.default instanceof WebHook)) {
         throw new Error(
           `kuusi-no-hook-export: ${absolutePath} does not provide a webhook export`,
         );
       }
-    }
+    } else continue; // Will never run
 
     routes.push([
       new URLPattern({ pathname: parsePath(path) }),
-      (imports as { default: WebSource | WebHook }).default,
+      imports.default as WebSource | WebHook,
     ]);
   }
 
-  const parsedURLs = routes.map(([url]) =>
-    url.pathname.replace(/\/:[^\/]+(?!=\/)/g, "®")
-  );
-
-  const duplicate = getDuplicate(parsedURLs)[0];
-
-  if (duplicate) {
-    throw new Error(
-      `kuusi-duplicate-routes: The "${duplicate}" URL is served multiple times.`,
-    );
-  }
+  checkDuplicateRoutes(routes);
 
   if (kuusiConfig.routes.warnAmbiguousRoutes) {
     for (const ambiguousURL of getAmbiguousURLs(routes)) {
@@ -167,7 +165,7 @@ export async function kuusi(req: Request, routes: Route[]): Promise<Response> {
 
   const [matchPattern, matchRoute] = match;
   const matchPatternResult = matchPattern.exec(req.url)!;
-  const matchMethod = matchRoute?.[req.method as keyof (WebSource | WebHook)];
+  const matchMethod = matchRoute[req.method as keyof (WebSource | WebHook)];
 
   return matchMethod
     ? await matchMethod(req, matchPatternResult)

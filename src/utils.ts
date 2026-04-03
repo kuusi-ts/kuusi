@@ -7,8 +7,6 @@
 import { join, toFileUrl } from "@std/path";
 import type { Route } from "./types.ts";
 
-export type MaybePromise<T> = T | Promise<T>;
-
 export const httpVerbs: string[] = [
   "GET",
   "POST",
@@ -40,6 +38,8 @@ export const parsePath = (path: string) => {
   else if (path.endsWith("source")) path = path.slice(0, -7);
 
   if (path.endsWith("index")) path = path.slice(0, -5);
+
+  if (Deno.build.os === "windows") path.replace(/\;/g, ";");
 
   return "/" + path;
 };
