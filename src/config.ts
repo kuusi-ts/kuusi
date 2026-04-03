@@ -10,10 +10,6 @@ import { toLocalPath } from "./utils.ts";
 
 let kuusiConfig = new KuusiConfig();
 
-const invalidKuusiConfig = new Error(
-  "kuusi-invalid-kuusi-config: the exported kuusiConfig should be of type `KuusiConfig`",
-);
-
 if (existsSync(toLocalPath("kuusi.config.ts").pathname)) {
   const kuusiConfigImport = await import(
     toLocalPath("kuusi.config.ts").href
@@ -23,7 +19,9 @@ if (existsSync(toLocalPath("kuusi.config.ts").pathname)) {
     if (kuusiConfigImport.default instanceof KuusiConfig) {
       kuusiConfig = kuusiConfigImport.default;
     } else {
-      throw invalidKuusiConfig;
+      throw new Error(
+        "kuusi-invalid-kuusi-config: the exported kuusiConfig should be of type `KuusiConfig`",
+      );
     }
   }
 }
