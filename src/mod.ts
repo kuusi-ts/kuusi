@@ -97,13 +97,13 @@ export async function getKuusiRoutes(): Promise<Route[]> {
       );
     }
 
-    if (/.\.source/.test(path)) {
+    if (/^.\.source/.test(path)) {
       if (!(imports.default instanceof WebSource)) {
         throw new Error(
           `kuusi-no-source-export: ${absolutePath} does not provide a source export`,
         );
       }
-    } else if (/.\.hook/.test(path)) {
+    } else if (/^.\.hook/.test(path)) {
       if (!(imports.default instanceof WebHook)) {
         throw new Error(
           `kuusi-no-hook-export: ${absolutePath} does not provide a webhook export`,

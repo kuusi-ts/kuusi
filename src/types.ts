@@ -4,7 +4,7 @@
  * Module containing all the types kuusi exports.
  */
 
-type MaybePromise<T> = T | Promise<T>;
+import type { MaybePromise } from "./utils.ts";
 
 /**
  * Type that holds a URLPattern and either a `WebSource` or a `WebHook`. Used
@@ -70,7 +70,7 @@ export class WebHook extends WebSource {
  */
 export type WebHookTrigger = () => MaybePromise<void>;
 
-/** Type holding the routes configuration options. */
+/** Interface holding the routes configuration options. */
 interface KuusiRoutesConfig {
   /**
    * The path to the directory that holds the routes. Defaults to `routes/`.
@@ -83,7 +83,7 @@ interface KuusiRoutesConfig {
   warnAmbiguousRoutes: boolean;
 }
 
-/** Type holding the dotenv and env options. */
+/** Interface holding the dotenv and env options. */
 interface KuusiDotenvConfig {
   /**
    * The path to the dotenv file that will be loaded. Defaults to
@@ -109,7 +109,7 @@ interface KuusiDotenvConfig {
 }
 
 /**
- * Type holding all the fields of `KuusiConfig` with all its fields set to
+ * Interface holding all the fields of `KuusiConfig` with all its fields set to
  * optional, even all the fields of fields that contain objects.
  */
 export interface PartialKuusiConfig {

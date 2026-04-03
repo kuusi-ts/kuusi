@@ -27,10 +27,13 @@
 
 ### `0.4.5`
 
-- Removed two useless interfaces.
+- Removed two useless interfaces, because I learned that classes generate both a value (constructor function) and the interface in TypeScript.
 
-### `0.4.6`
+### `1.0.0`
 
 - Redid the configuration so now `KuusiConfig` is a class, not an interface. This cleans up the mess of semi-manually type checking the config and assigning default values.
-- Apparently the colon (:) character is reserved on windows for file names, so on windows you can use the semicolon (;) instead
-- Mentally getting ready for release `v1.0.0`.
+- Apparently the colon (:) character is reserved on windows for file names, so on windows you can use the semicolon (;) instead.
+
+## `1.0.1` 
+
+- Updated inconsistent docs.

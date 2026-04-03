@@ -2,6 +2,7 @@
 
 [![JSR version](https://jsr.io/badges/@kuusi/kuusi)](https://jsr.io/@kuusi/kuusi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![JSR Score](https://jsr.io/badges/@kuusi/kuusi/score)](https://jsr.io/@kuusi/kuusi/score)
 
 Pronounce: /ˈkʷuːsi/
 
@@ -46,11 +47,11 @@ export const route = new WebSource({
 ~> `src/index.ts`
 
 ```ts
-import { kuusi } from "@kuusi/kuusi";
+import { getKuusiRoutes, kuusi } from "@kuusi/kuusi";
 
-const routes = getKuusiRoutes();
+const routes = await getKuusiRoutes();
 
-Deno.serve({ port: 1296 }, async function (req: Request): Promise<Response> {
+Deno.serve({ port: 1296 }, async (req) => {
   return await kuusi(req, routes);
 });
 ```

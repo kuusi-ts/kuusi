@@ -7,6 +7,8 @@
 import { join, toFileUrl } from "@std/path";
 import type { Route } from "./types.ts";
 
+export type MaybePromise<T> = T | Promise<T>;
+
 export const httpVerbs: string[] = [
   "GET",
   "POST",
