@@ -1,6 +1,6 @@
 import { assert, assertEquals } from "@std/assert";
-import { parsePath, validRouteGuard } from "../src/utils.ts";
 import { assertFalse } from "@std/assert/false";
+import { parsePath, routeGuard } from "../src/utils.ts";
 
 Deno.test({
   name: "Parse Path",
@@ -17,16 +17,16 @@ Deno.test({
 Deno.test({
   name: "Valid route",
   fn: () => {
-    assert(validRouteGuard("index.source.ts"));
-    assert(validRouteGuard("kuusi.hook.js"));
-    assert(validRouteGuard("yksi.source.mjs"));
-    assert(validRouteGuard("kaksi.source.cts"));
-    assert(validRouteGuard("kolme.hook.mjsx"));
-    assert(validRouteGuard("viisi.hook.ctsx"));
-    assertFalse(validRouteGuard("index.source.rs")); // No rust
-    assertFalse(validRouteGuard("kuusi.source.cs")); // No csharp
-    assertFalse(validRouteGuard("yksi.hook.kts"));
-    assertFalse(validRouteGuard("kaksi.hook.sqwuimble"));
-    assertFalse(validRouteGuard("kolme.source.kmtsx"));
+    assert(routeGuard("index.source.ts"));
+    assert(routeGuard("kuusi.hook.js"));
+    assert(routeGuard("yksi.source.mjs"));
+    assert(routeGuard("kaksi.source.cts"));
+    assert(routeGuard("kolme.hook.mjsx"));
+    assert(routeGuard("viisi.hook.ctsx"));
+    assertFalse(routeGuard("index.source.rs")); // No rust
+    assertFalse(routeGuard("kuusi.source.cs")); // No csharp
+    assertFalse(routeGuard("yksi.hook.kts"));
+    assertFalse(routeGuard("kaksi.hook.sqwuimble"));
+    assertFalse(routeGuard("kolme.source.kmtsx"));
   },
 });

@@ -1,6 +1,6 @@
 {
   "name": "@kuusi/kuusi",
-  "version": "1.0.2-alpha",
+  "version": "1.0.2",
   "exports": {
     ".": "./mod.ts",
     "./env": "./env.ts",

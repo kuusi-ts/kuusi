@@ -12,12 +12,12 @@ import { type Route, WebHook, WebSource } from "./types.ts";
 import {
   getAmbiguousURLs,
   getDuplicate,
+  hookGuard,
   httpVerbs,
   parsePath,
-  toLocalPath,
-  hookGuard,
   routeGuard,
   sourceGuard,
+  toLocalPath,
 } from "./utils.ts";
 
 export * from "./env.ts";

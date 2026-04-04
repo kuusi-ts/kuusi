@@ -6,7 +6,8 @@
   - Kuusi config option?
   - Route config option seems best
 - ? Implement a standard way to handle databases
-  - May be too difficult, as I have too little experience with anything other than sqlite3
+  - May be too difficult, as I have too little experience with anything other
+    than sqlite3
 
 ## Already done list
 
@@ -20,4 +21,5 @@
 
 - Learn about and implement websockets
   - `Deno.upgradeWebSocket`?
-  - Deno has this already completely fixed, so I don't really know what I could add still.
+  - Deno has this already completely fixed, so I don't really know what I could
+    add still.
