@@ -92,7 +92,14 @@ export async function getKuusiRoutes(): Promise<Route[]> {
     }
   }
 
-  return routes;
+  // Sorting and reversing makes sure the pathnames are checked in the
+  // following order:
+  // 1. Normal pathnames
+  // 2. Generic pathnames (those starting with a colon)
+  // 3. The root pathname
+  return routes.sort(([a], [b]) =>
+    a.pathname.toLowerCase().localeCompare(b.pathname.toLowerCase())
+  ).reverse();
 }
 
 /**
@@ -110,7 +117,7 @@ export async function getKuusiRoutes(): Promise<Route[]> {
 export async function kuusi(req: Request, routes: Route[]): Promise<Response> {
   const headers = {
     "content-type": "application/json; charset=utf-8",
-  };
+  } as const;
 
   if (!httpVerbs.includes(req.method)) {
     return new Response("{}", {

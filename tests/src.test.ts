@@ -11,6 +11,7 @@ Deno.test({
     assertEquals(parsePath("index.hook.ts"), "/");
     assertEquals(parsePath("kuusi/index.hook.cts"), "/kuusi/");
     assertEquals(parsePath("kuusi.hook.mts"), "/kuusi");
+    assertEquals(parsePath("viisi/:id.source.ctsx"), "/viisi/:id");
   },
 });
 

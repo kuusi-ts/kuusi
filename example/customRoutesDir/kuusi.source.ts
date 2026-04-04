@@ -1,11 +1,13 @@
 import { WebSource } from "@kuusi/kuusi";
 
 const route = new WebSource({
-  GET: (req: Request): Response => {
+  GET: (req, _patternResult): Response => {
+    const params = new URL(req.url).searchParams;
+
     return new Response(
       JSON.stringify({
         message: "Welcome to kuusi",
-        request: req,
+        id: params.has("id") ? params.get("id") : undefined,
       }),
       {
         status: 200,

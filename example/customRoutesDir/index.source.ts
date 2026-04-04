@@ -4,7 +4,7 @@ const route = new WebSource({
   GET: (req: Request): Response => {
     return new Response(
       JSON.stringify({
-        message: "hello",
+        message: "Welcome to the index route",
         request: req,
       }),
       {

@@ -46,3 +46,7 @@
 ### `1.0.2`
 
 - Fixed faulty regex that prevented routes from being loaded.
+
+## `1.1.0`
+
+- Fixed the order in which the pathnames are checked for matches such that the generic pathnames (aka those starting with colons) are checked after the normal pathnames. This makes sure they don't "claim" URL's that have route parameters in them when they aren't supposed to.
