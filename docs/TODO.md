@@ -1,6 +1,8 @@
 # To do list
 
 - Default headers for returned responses.
+- URL parameters with ? and &.
+- Implement integration tests.
 - Add CORS support
   - Express like?
   - Kuusi config option?
@@ -21,5 +23,4 @@
 
 - Learn about and implement websockets
   - `Deno.upgradeWebSocket`?
-  - Deno has this already completely fixed, so I don't really know what I could
-    add still.
+  - Deno has this already completely fixed, so I don't really know what I could add still.
