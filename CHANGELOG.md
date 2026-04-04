@@ -29,12 +29,16 @@
 
 - Removed two useless interfaces, because I learned that classes generate both a value (constructor function) and the interface in TypeScript.
 
-### `1.0.0`
+## `1.0.0`
 
 - Redid the configuration so now `KuusiConfig` is a class, not an interface. This cleans up the mess of semi-manually type checking the config and assigning default values.
 - Apparently the colon (:) character is reserved on windows for file names, so on windows you can use the semicolon (;) instead.
 
-## `1.0.1` 
+### `1.0.1`
 
 - Updated inconsistent docs.
 - Added a guide to the docs.
+
+### `1.0.2`
+
+- Fixed faulty regex that prevented routes from being loaded.

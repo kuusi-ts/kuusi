@@ -2,43 +2,6 @@
  * kuusi: Se ei ole Oak-viittaus. A simple router / library / framework for
  * Deno utilizing file-based routing.
  *
- * @example Basic usage
- *
- * ~> `routes/index.source.ts`
- * ```ts
- * import { WebSource } from "@kuusi/kuusi";
- *
- * export const route = new WebSource({
- *   GET: (req, patternResult) => {
- *     return new Response(
- *       JSON.stringify({
- *         message: "welcome to kuusi!",
- *       }),
- *       {
- *         status: 200,
- *         headers: {
- *           "content-type": "application/json; charset=utf-8",
- *         },
- *       },
- *     );
- *   },
- * });
- * ```
- *
- * ~> `src/index.ts`
- * ```ts
- * import { kuusi } from "@kuusi/kuusi";
- *
- * const routes = getKuusiRoutes();
- *
- * Deno.serve(
- *   { port: 1296 },
- *   async function (req: Request): Promise<Response> {
- *     return await kuusi(req, routes);
- *   },
- * );
- * ```
- *
  * @module
  */
 
@@ -52,7 +15,9 @@ import {
   httpVerbs,
   parsePath,
   toLocalPath,
-  validRouteGuard,
+  hookGuard,
+  routeGuard,
+  sourceGuard,
 } from "./utils.ts";
 
 export * from "./env.ts";
@@ -86,7 +51,7 @@ export async function getKuusiRoutes(): Promise<Route[]> {
   const routes: Route[] = [];
 
   for (const path of paths) {
-    if (!validRouteGuard(path)) continue;
+    if (!routeGuard(path)) continue;
 
     const absolutePath = toLocalPath(kuusiConfig.routes.path, path).href;
     const imports = await import(absolutePath) as object;
@@ -97,19 +62,19 @@ export async function getKuusiRoutes(): Promise<Route[]> {
       );
     }
 
-    if (/^.\.source/.test(path)) {
+    if (sourceGuard(path)) {
       if (!(imports.default instanceof WebSource)) {
         throw new Error(
           `kuusi-no-source-export: ${absolutePath} does not provide a source export`,
         );
       }
-    } else if (/^.\.hook/.test(path)) {
+    } else if (hookGuard(path)) {
       if (!(imports.default instanceof WebHook)) {
         throw new Error(
           `kuusi-no-hook-export: ${absolutePath} does not provide a webhook export`,
         );
       }
-    } else continue; // Will never run
+    } else continue;
 
     routes.push([
       new URLPattern({ pathname: parsePath(path) }),
