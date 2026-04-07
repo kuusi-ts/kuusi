@@ -37,9 +37,7 @@ import { kuusiConfig } from "./config.ts";
 import { toLocalPath } from "./utils.ts";
 
 const missingDotenvKey = (key: string) =>
-  new Error(
-    `kuusi-missing-dotenv-key: Missing dotenv variable "${key}".`,
-  );
+  new Error(`kuusi-missing-dotenv-key: Missing required dotenv variable "${key}".`);
 
 /**
  * Object containing all variables from a `.env` file.

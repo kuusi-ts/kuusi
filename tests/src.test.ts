@@ -31,3 +31,5 @@ Deno.test({
     assertFalse(routeGuard("kolme.source.kmtsx"));
   },
 });
+
+// todo @Derek Verduijn write tests for the config setup

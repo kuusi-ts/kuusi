@@ -3,7 +3,7 @@ import { Route, WebSource } from "@kuusi/kuusi";
 const thing = new Route({
   urlPattern: new URLPattern({ pathname: "/kuusi/viisi" }),
   route: new WebSource({
-    GET(req): Response {
+    GET: (req): Response => {
       const searchParams = new URL(req.url).searchParams;
 
       return new Response(

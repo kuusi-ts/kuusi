@@ -9,13 +9,16 @@ Table of contents:
   - [Configure kuusi](#step-3-configure-kuusi)
   - [Make a webhook](#step-4-make-a-webhook)
 - [Errors](#errors)
-  - [`kuusi-invalid-kuusi-config`](#kuusi-invalid-kuusi-config)
-  - [`kuusi-no-routes-directory`](#kuusi-no-routes-directory)
-  - [`kuusi-missing-dotenv-key`](#kuusi-missing-dotenv-key)
-  - [`kuusi-no-route-export`](#kuusi-no-route-export)
-  - [`kuusi-no-source-export`](#kuusi-no-source-export)
-  - [`kuusi-no-hook-export`](#kuusi-no-hook-export)
-  - [`kuusi-duplicate-routes`](#kuusi-duplicate-routes)
+  - [Configuration Errors](#configuration-errors)
+    - [`kuusi-invalid-kuusi-config`](#kuusi-invalid-kuusi-config)
+    - [`kuusi-no-kuusi-config`](#kuusi-no-kuusi-config)
+  - [Dotenv Errors](#dotenv-errors)
+    - [`kuusi-missing-dotenv-key`](#kuusi-missing-dotenv-key)
+  - [Routing Errors](#routing-errors)
+    - [`kuusi-duplicate-routes`](#kuusi-duplicate-routes)
+    - [`kuusi-invalid-route-export`](#kuusi-invalid-route-export)
+    - [`kuusi-no-routes-directory`](#kuusi-no-routes-directory)
+  - [Other](#other)
 - [Warnings](#warnings)
   - [`kuusi-ambiguous-url`](#kuusi-ambiguous-url)
 - [Configuration](#configuration)
@@ -192,12 +195,13 @@ Notice a couple of differences between a webhook and a websource:
 Sometimes kuusi may tell you that your code sucks and give you an error
 alongside it, here is what they all mean.
 
-## kuusi-invalid-kuusi-config
+## Configuration Errors
+
+### kuusi-invalid-kuusi-config
 
 ```ts
-// ~> `config.ts`.
 new Error(
-  "kuusi-invalid-kuusi-config: the exported kuusiConfig should be an instance of `KuusiConfig`",
+  "kuusi-invalid-kuusi-config: The exported kuusiConfig should be an instance of `KuusiConfig`.",
 );
 ```
 
@@ -206,10 +210,76 @@ the configuration you exported wasn't exported as default, because you used the
 wrong type for the configuration object or because you didn't use the
 constructor of the `KuusiConfig` class.
 
-## kuusi-no-routes-directory
+### kuusi-invalid-route-config
 
 ```ts
-// ~> `config.ts`.
+new Error(
+  "kuusi-invalid-route-directory: The name of the routes directory is invalid.",
+);
+```
+
+Thrown when then name of the routes directory is not allowed.
+
+### kuusi-no-kuusi-config
+
+```ts
+new Error(
+  "kuusi-no-kuusi-config: The configuration file does not provide a default export.",
+);
+```
+
+Thrown when a `kuusi.config.ts` file exists, but does not provide a default export. Check whether your configuration was exported correctly, or at all.
+
+## Dotenv Errors
+
+### kuusi-missing-dotenv-key
+
+```ts
+new Error(
+  `kuusi-missing-dotenv-key: Missing required dotenv variable "${key}".`,
+);
+```
+
+Thrown when the dotenv file is missing the required `key` key.
+
+## Routing Errors
+
+### kuusi-duplicate-routes
+
+```ts
+new Error(
+  `kuusi-duplicate-routes: The ${duplicate} URL is served multiple times.`,
+);
+```
+
+Thrown when one URL can trigger two differnt routes.
+
+#### Example
+
+`/kuusi/:id.source.ts` and `/kuusi/:notanid.hook.ts` share the same URL, because
+they both have the form of `/kuusi/[genericRoute]`. When a request is made with
+the URL `/kuusi/3`, it matches with both URL's which would be silly.
+
+### kuusi-no-route-export
+
+```ts
+new Error(
+  `kuusi-invalid-route-export: The route file ${path} does not provide a valid default route export.`,
+);
+```
+
+Thrown when the file `path` does not provide a default `WebSource`, `WebHook` or `Route` export. This error could also mean that
+
+- the file does not export anything at all,
+- the file does not export the correct type of route:
+  - `WebSource` for `.source` files,
+  - `WebHook` for `.hook` files,
+  - and `Route` for routes outside the routes directory.
+- the file does not export the route as default (only applies to `.source` and `.hook` files in the routes directory).
+
+### kuusi-no-routes-directory
+
+```ts
 new Error("kuusi-no-routes-directory: The routes directory does not exist.");
 ```
 
@@ -217,73 +287,11 @@ Thrown when the directory that should contain the routes does not exist. If you
 think that it does, check whether your routes directory's name contains a typo
 either in the configuration file or in your file systen.
 
-## kuusi-missing-dotenv-key
-
-```ts
-// ~> `env.ts`
-new Error(`kuusi-missing-dotenv-key: Missing dotenv variable "${notFound}"`);
-```
-
-Thrown when the dotenv file is missing one or more required keys specified in
-the template dotenv file.
-
-## kuusi-no-route-export
-
-~> `mod.ts`
-
-```ts
-// ~> `mod.ts`
-new Error(
-  `kuusi-no-route-export: ${absolutePath} does not provide a default export`,
-);
-```
-
-Thrown when the file at `absolutePath` does not provide a default export.
-
-## kuusi-no-source-export
-
-```ts
-// ~> `mod.ts`
-new Error(
-  `kuusi-no-source-export: ${absolutePath} does not provide a websource export`,
-);
-```
-
-Thrown when the `.source.ts` file at `absolutePath` does not provide a (valid)
-websource export.
-
-## kuusi-no-hook-export
-
-```ts
-// ~> `mod.ts`
-new Error(
-  `kuusi-no-hook-export: ${absolutePath} does not provide a wehook export`,
-);
-```
-
-Thrown when the `.hook.ts` file at `absolutePath` does not provide a (valid)
-webhook export.
-
-## kuusi-duplicate-routes
-
-```ts
-// ~> `mod.ts`
-new Error(
-  `kuusi-duplicate-routes: The "${duplicate}" URL is served multiple times.`,
-);
-```
-
-Thrown when the URL's of the routes at `first` and `last` are the same.
-
-### Example
-
-`/kuusi/:id.source.ts` and `/kuusi/:notanid.hook.ts` share the same URL, because
-they both have the form of `/kuusi/[genericRoute]`. When a request is made with
-the URL `/kuusi/3`, it matches with both URL's which would be silly.
-
 # Warnings
 
-## kuusi-ambiguous-url
+## Routing Warnings
+
+### kuusi-ambiguous-url
 
 ```ts
 // ~> `mod.ts`

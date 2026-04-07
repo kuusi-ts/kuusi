@@ -23,6 +23,11 @@ import {
 export * from "./env.ts";
 export * from "./types.ts";
 
+const noRouteExport = (path: string): Error =>
+  new Error(
+    `kuusi-invalid-route-export: The route file ${path} does not provide a valid default route export.`,
+  );
+
 /**
  * Function that collects all the routes from the routes directory.
  *
@@ -30,7 +35,6 @@ export * from "./types.ts";
  */
 export async function getKuusiRoutes(): Promise<Route[]> {
   const routes: Route[] = [];
-
   const directoryPath = kuusiConfig.routes.directoryPath;
 
   if (directoryPath) {
@@ -45,23 +49,12 @@ export async function getKuusiRoutes(): Promise<Route[]> {
       const absolutePath = toLocalPath(directoryPath, path).href;
       const imports = await import(absolutePath) as object;
 
-      if (!("default" in imports)) {
-        throw new Error(
-          `kuusi-no-default-export: ${absolutePath} does not provide a default export.`,
-        );
-      }
+      if (!("default" in imports)) throw noRouteExport(absolutePath);
 
-      if (sourceGuard(path) && !(imports.default instanceof WebSource)) {
-        throw new Error(
-          `kuusi-no-source-export: ${absolutePath} does not provide a source export.`,
-        );
-      }
-
-      if (hookGuard(path) && !(imports.default instanceof WebHook)) {
-        throw new Error(
-          `kuusi-no-hook-export: ${absolutePath} does not provide a webhook export.`,
-        );
-      }
+      if (
+        (sourceGuard(path) && !(imports.default instanceof WebSource)) ||
+        (hookGuard(path) && !(imports.default instanceof WebHook))
+      ) throw noRouteExport(path);
 
       routes.push(
         new Route({
@@ -72,25 +65,13 @@ export async function getKuusiRoutes(): Promise<Route[]> {
     }
   }
 
-  for (const filePath of kuusiConfig.routes.filePaths) {
-    const routeFileImports = await import(toLocalPath(filePath).href) as object;
+  for (const path of kuusiConfig.routes.filePaths) {
+    const routeFileImports = await import(toLocalPath(path).href) as object;
 
-    if (Object.keys(routeFileImports).length === 0) {
-      // todo @Derek Verduijn document this
-      throw new Error(
-        `kuusi-no-route-file-exports: ${filePath} does not provide any exports.`,
-      );
-    }
+    if (Object.keys(routeFileImports).length === 0) throw noRouteExport(path);
 
-    for (const [name, routeFileImport] of Object.entries(routeFileImports)) {
-      if (routeFileImport instanceof Route) {
-        routes.push(routeFileImport);
-      } else {
-        // todo @Derek Verduijn document this warning and think of better name
-        console.warn(
-          `kuusi-extra-route-export: The ${name} export from ${filePath} is not a route.`,
-        );
-      }
+    for (const routeFileImport of Object.values(routeFileImports)) {
+      if (routeFileImport instanceof Route) routes.push(routeFileImport);
     }
   }
 
@@ -103,14 +84,13 @@ export async function getKuusiRoutes(): Promise<Route[]> {
 
     if (duplicate) {
       throw new Error(
-        `kuusi-duplicate-routes: The "${duplicate}" URL is served multiple times.`,
+        `kuusi-duplicate-routes: The ${duplicate} URL is served multiple times.`,
       );
     }
   }
 
   if (kuusiConfig.routes.warnAmbiguousRoutes) {
     for (const ambiguousURL of getAmbiguousURLs(routes)) {
-      // todo @Derek Verduijn document this warning
       console.warn(
         `kuusi-ambiguous-url: The routes "${ambiguousURL}" and "${ambiguousURL}/" are very similar. Consider renaming at least one of them.`,
       );
@@ -122,9 +102,12 @@ export async function getKuusiRoutes(): Promise<Route[]> {
   // 1. Normal pathnames
   // 2. Generic pathnames (those starting with a colon)
   // 3. The root pathname
-  return routes.sort(({ urlPattern: a }, { urlPattern: b }) =>
-    a.pathname.toLowerCase().localeCompare(b.pathname.toLowerCase())
-  ).reverse();
+  return routes.sort((a, b) => {
+    const pathA = a.urlPattern.pathname.toLowerCase();
+    const pathB = b.urlPattern.pathname.toLowerCase();
+
+    return pathA.localeCompare(pathB);
+  }).reverse();
 }
 
 /**

@@ -163,12 +163,13 @@ export class KuusiConfig {
   constructor(obj?: PartialKuusiConfig) {
     if (!obj) return;
     if (obj.routes) {
+      // todo @Derek Verduijn this guard is not complete
       if (obj.routes.directoryPath === "") {
-        // todo @Derek Verduijn document this error
         throw new Error(
           "kuusi-invalid-route-directory: The name of the routes directory is invalid.",
         );
       }
+
       Object.assign(this.routes, obj.routes);
     }
     if (obj.dotenv) Object.assign(this.dotenv, obj.dotenv);

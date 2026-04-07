@@ -11,9 +11,7 @@ import { toLocalPath } from "./utils.ts";
 let kuusiConfig = new KuusiConfig();
 
 if (existsSync(toLocalPath("kuusi.config.ts").pathname)) {
-  const kuusiConfigImport = await import(
-    toLocalPath("kuusi.config.ts").href
-  );
+  const kuusiConfigImport = await import(toLocalPath("kuusi.config.ts").href);
 
   if (!("default" in kuusiConfigImport)) {
     throw new Error(
