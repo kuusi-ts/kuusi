@@ -10,7 +10,21 @@ import type { MaybePromise } from "./utils.ts";
  * Type that holds a URLPattern and either a `WebSource` or a `WebHook`. Used
  * to combine the path of a route with the route itself.
  */
-export type Route = [URLPattern, WebSource | WebHook];
+export class Route {
+  /**
+   * The `URLPattern` of this `Route`.
+   */
+  urlPattern: URLPattern;
+  /**
+   * The `WebSource` or `WebHook` that this `Route` serves.
+   */
+  route: WebSource | WebHook;
+
+  constructor(obj: Route) {
+    this.urlPattern = obj.urlPattern;
+    this.route = obj.route;
+  }
+}
 
 /**
  * Class that represents a kuusi WebSource.
@@ -34,7 +48,7 @@ export class WebSource {
   readonly OPTIONS?: WebSourceMethod;
 
   constructor(obj: WebSource) {
-    this.OPTIONS = () => new Response(JSON.stringify(Object.entries(this)));
+    this.OPTIONS = () => new Response(JSON.stringify(Object.keys(this)));
     Object.assign(this, obj);
   }
 }
@@ -73,14 +87,22 @@ export type WebHookTrigger = () => MaybePromise<void>;
 /** Interface holding the routes configuration options. */
 interface KuusiRoutesConfig {
   /**
-   * The path to the directory that holds the routes. Defaults to `routes/`.
+   * The path to the directory that holds the routes. Defaults to `routes/`. If
+   * set to `undefined`, the `kuusi-no-routes-directory` error won't be trown,
+   * allowing routing without a routes directory.
    */
-  path: string;
+  directoryPath: string | undefined;
   /**
    * Whether a warning should be shown when two url's only differ by a trailing
    * forwardslash.
    */
   warnAmbiguousRoutes: boolean;
+  /**
+   * The paths to files containing additional routes. Can be used for extra
+   * routes besides those in the routes directory, or as a replacement of it
+   * for extra project structure flexibility.
+   */
+  filePaths: string[];
 }
 
 /** Interface holding the dotenv and env options. */
@@ -126,8 +148,9 @@ export interface PartialKuusiConfig {
 export class KuusiConfig {
   /** The route configuration options. */
   routes: KuusiRoutesConfig = {
-    path: "routes",
+    directoryPath: "routes",
     warnAmbiguousRoutes: true,
+    filePaths: [],
   };
   /** The dotenv configuration options. */
   dotenv: KuusiDotenvConfig = {
@@ -139,7 +162,15 @@ export class KuusiConfig {
 
   constructor(obj?: PartialKuusiConfig) {
     if (!obj) return;
-    if (obj.routes) Object.assign(this.routes, obj.routes);
+    if (obj.routes) {
+      if (obj.routes.directoryPath === "") {
+        // todo @Derek Verduijn document this error
+        throw new Error(
+          "kuusi-invalid-route-directory: The name of the routes directory is invalid.",
+        );
+      }
+      Object.assign(this.routes, obj.routes);
+    }
     if (obj.dotenv) Object.assign(this.dotenv, obj.dotenv);
   }
 }

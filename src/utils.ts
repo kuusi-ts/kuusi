@@ -36,11 +36,13 @@ export const parsePath = (path: string) => {
   // Removes the file extensions
   path = path.split(".").slice(0, -1).join(".");
 
+  // Removes the .hook or .source
   if (path.endsWith("hook")) path = path.slice(0, -5);
   else if (path.endsWith("source")) path = path.slice(0, -7);
 
   if (path.endsWith("index")) path = path.slice(0, -5);
 
+  // : is reserved, so use ; instead
   if (Deno.build.os === "windows") path.replace(/\;/g, ";");
 
   return "/" + path;
@@ -51,8 +53,10 @@ export const getDuplicate = <T>(array: T[]) =>
 
 export const getAmbiguousURLs = (routes: Route[]) =>
   getDuplicate(
-    routes.map(([url]) =>
-      url.pathname.endsWith("/") ? url.pathname.slice(0, -1) : url.pathname
+    routes.map(({ urlPattern }) =>
+      urlPattern.pathname.endsWith("/")
+        ? urlPattern.pathname.slice(0, -1)
+        : urlPattern.pathname
     ),
   );
 

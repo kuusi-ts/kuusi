@@ -13,21 +13,26 @@ let kuusiConfig = new KuusiConfig();
 if (existsSync(toLocalPath("kuusi.config.ts").pathname)) {
   const kuusiConfigImport = await import(
     toLocalPath("kuusi.config.ts").href
-  ) as object;
+  );
 
-  if ("default" in kuusiConfigImport && kuusiConfigImport.default) {
-    if (kuusiConfigImport.default instanceof KuusiConfig) {
-      kuusiConfig = kuusiConfigImport.default;
-    } else {
-      throw new Error(
-        "kuusi-invalid-kuusi-config: the exported kuusiConfig should be an instance of `KuusiConfig`",
-      );
-    }
+  if (!("default" in kuusiConfigImport)) {
+    throw new Error(
+      "kuusi-no-kuusi-config: The configuration file does not have a default export.",
+    );
   }
+
+  if (!(kuusiConfigImport.default instanceof KuusiConfig)) {
+    throw new Error(
+      "kuusi-invalid-kuusi-config: The exported kuusiConfig should be an instance of `KuusiConfig`.",
+    );
+  }
+
+  kuusiConfig = kuusiConfigImport.default;
 }
 
 if (
-  !existsSync(toLocalPath(kuusiConfig.routes.path).pathname, {
+  kuusiConfig.routes.directoryPath !== undefined &&
+  !existsSync(toLocalPath(kuusiConfig.routes.directoryPath).pathname, {
     isDirectory: true,
   })
 ) {
