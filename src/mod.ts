@@ -76,7 +76,10 @@ export async function getKuusiRoutes(): Promise<Route[]> {
     const routeFileImports = await import(toLocalPath(filePath).href) as object;
 
     if (Object.keys(routeFileImports).length === 0) {
-      throw new Error(`kuusi-no-route-file-exports `);
+      // todo @Derek Verduijn document this
+      throw new Error(
+        `kuusi-no-route-file-exports: ${filePath} does not provide any exports.`,
+      );
     }
 
     for (const [name, routeFileImport] of Object.entries(routeFileImports)) {
