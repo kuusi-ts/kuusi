@@ -49,9 +49,8 @@ export async function getKuusiRoutes(): Promise<Route[]> {
       const absolutePath = toLocalPath(directoryPath, path).href;
       const imports = await import(absolutePath) as object;
 
-      if (!("default" in imports)) throw noRouteExport(absolutePath);
-
       if (
+        !("default" in imports) ||
         (sourceGuard(path) && !(imports.default instanceof WebSource)) ||
         (hookGuard(path) && !(imports.default instanceof WebHook))
       ) throw noRouteExport(path);

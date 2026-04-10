@@ -17,7 +17,7 @@
 - Make kuusi check whether two routes are duplicate.
 - Sort the fields in `KuusiConfig` by theme, so for example all dotenv fields
   are grouped in a `dotenv` object.
-- ? OPTIONS verb that gives the options of that endpoint
+- OPTIONS verb that gives the options of that endpoint
 
 ## Not going to do list
 

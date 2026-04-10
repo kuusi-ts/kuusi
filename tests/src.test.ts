@@ -1,6 +1,7 @@
 import { assert, assertEquals } from "@std/assert";
 import { assertFalse } from "@std/assert/false";
 import { parsePath, routeGuard } from "../src/utils.ts";
+import { KuusiConfig } from "@kuusi/kuusi/types";
 
 Deno.test({
   name: "Parse Path",
@@ -32,4 +33,34 @@ Deno.test({
   },
 });
 
-// todo @Derek Verduijn write tests for the config setup
+Deno.test({
+  name: "Kuusi Config",
+  fn: () => {
+    const config = new KuusiConfig({
+      routes: {
+        directoryPath: "routes",
+        warnAmbiguousRoutes: true,
+        filePaths: [],
+      },
+      dotenv: {
+        path: ".env",
+        requiredPath: "template.env",
+        export: false,
+        requiredKeys: [],
+      },
+    });
+    assertEquals(new KuusiConfig(), config);
+    assertEquals(new KuusiConfig({}), config);
+    assertEquals(new KuusiConfig({ routes: {} }), config);
+    config.dotenv.export = true;
+    assertEquals(new KuusiConfig({ dotenv: { export: true } }), config);
+    config.routes.filePaths = ["haiii", ":3"];
+    assertEquals(
+      new KuusiConfig({
+        dotenv: { export: true },
+        routes: { filePaths: ["haiii", ":3"] },
+      }),
+      config,
+    );
+  },
+});
