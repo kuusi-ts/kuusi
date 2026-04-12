@@ -18,20 +18,6 @@ export const httpVerbs: string[] = [
   "OPTIONS",
 ] as const;
 
-export const ObjectEntriesof = <T extends object>(obj: T) =>
-  Object.entries(obj) as [keyof T, T[keyof T]][];
-
-export const isObjKey = <T extends NonNullable<object>>(
-  key: string | number | symbol,
-  obj: T,
-): key is keyof T => key in obj;
-
-export const isObjField = <T extends NonNullable<object>>(
-  key: string | number | symbol,
-  value: unknown,
-  obj: T,
-): key is keyof T => isObjKey(key, obj) && typeof value === typeof obj[key];
-
 export const parsePath = (path: string) => {
   // Removes the file extensions
   path = path.split(".").slice(0, -1).join(".");

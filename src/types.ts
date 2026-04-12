@@ -45,10 +45,10 @@ export class WebSource {
   /** The method serving the DELETE method of this `WebSource`. */
   readonly DELETE?: WebSourceMethod;
   /** The method serving the OPTIONS method of this `WebSource`. */
-  readonly OPTIONS?: WebSourceMethod;
+  readonly OPTIONS?: WebSourceMethod = () =>
+    new Response(JSON.stringify(Object.keys(this)));
 
   constructor(obj: WebSource) {
-    this.OPTIONS = () => new Response(JSON.stringify(Object.keys(this)));
     Object.assign(this, obj);
   }
 }
