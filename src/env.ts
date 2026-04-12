@@ -37,9 +37,7 @@ import { kuusiConfig } from "./config.ts";
 import { toLocalPath } from "./utils.ts";
 
 const missingDotenvKey = (key: string) =>
-  new Error(
-    `kuusi-missing-dotenv-key: Missing dotenv variable "${key}"`,
-  );
+  new Error(`kuusi-missing-dotenv-key: Missing required dotenv variable "${key}".`);
 
 /**
  * Object containing all variables from a `.env` file.
@@ -63,9 +61,9 @@ if (kuusiConfig.dotenv.requiredKeys.length !== 0) {
   if (notFound) throw missingDotenvKey(notFound);
 }
 
-if (existsSync(toLocalPath(kuusiConfig.dotenv.templatePath).pathname)) {
+if (existsSync(toLocalPath(kuusiConfig.dotenv.requiredPath).pathname)) {
   const templateDotenv = await load({
-    envPath: kuusiConfig.dotenv.templatePath,
+    envPath: kuusiConfig.dotenv.requiredPath,
   });
 
   const notFound = Object.keys(templateDotenv).find((key) => !(key in dotenv));

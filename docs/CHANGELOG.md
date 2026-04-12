@@ -46,3 +46,11 @@
 ### `1.0.2`
 
 - Fixed faulty regex that prevented routes from being loaded.
+
+## `1.1.0`: The Flexibility Update
+
+- Fixed the order in which the pathnames are checked for matches such that the generic pathnames (aka those starting with colons) are checked after the normal pathnames. This makes sure they don't "claim" URL's that have route parameters in them when they aren't supposed to.
+- Rethought almost all errors to rely more on documentation rather on the small descriptions they show themselves, so they can be explained better in the documentation.
+- Adding routes from files outside of the routes directory is now supported, just use the `Route` class (was previously a type alias) and pass the file name to `kuusi.config.ts` and kuusi will import that route for you!
+- Added unit tests for the `KuusiConfig` class.
+- Renamed template dotenv to required dotenv, because I realised that is a better discription.

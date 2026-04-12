@@ -2,13 +2,14 @@ import { KuusiConfig } from "@kuusi/kuusi/types";
 
 const config = new KuusiConfig({
   routes: {
-    path: "customRoutesDir",
+    directoryPath: "customRoutesDir",
     warnAmbiguousRoutes: true,
+    filePaths: ["src/extraRoute.ts"],
   },
   dotenv: {
     path: "new.env",
     export: true,
-    templatePath: "newTemplate.env",
+    requiredPath: "newTemplate.env",
     requiredKeys: ["requiredKey"],
   },
 });

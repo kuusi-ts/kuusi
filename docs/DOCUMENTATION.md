@@ -1,4 +1,4 @@
-# Docs
+# Documentation
 
 Table of contents:
 
@@ -9,35 +9,40 @@ Table of contents:
   - [Configure kuusi](#step-3-configure-kuusi)
   - [Make a webhook](#step-4-make-a-webhook)
 - [Errors](#errors)
-  - [`kuusi-invalid-kuusi-config`](#kuusi-invalid-kuusi-config)
-  - [`kuusi-no-routes-directory`](#kuusi-no-routes-directory)
-  - [`kuusi-missing-dotenv-key`](#kuusi-missing-dotenv-key)
-  - [`kuusi-no-route-export`](#kuusi-no-route-export)
-  - [`kuusi-no-source-export`](#kuusi-no-source-export)
-  - [`kuusi-no-hook-export`](#kuusi-no-hook-export)
-  - [`kuusi-duplicate-routes`](#kuusi-duplicate-routes)
+  - [Configuration Errors](#configuration-errors)
+    - [`kuusi-invalid-kuusi-config`](#kuusi-invalid-kuusi-config)
+    - [`kuusi-invalid-route-config`](#kuusi-invalid-route-config)
+    - [`kuusi-no-kuusi-config`](#kuusi-no-kuusi-config)
+  - [Dotenv Errors](#dotenv-errors)
+    - [`kuusi-missing-dotenv-key`](#kuusi-missing-dotenv-key)
+  - [Routing Errors](#routing-errors)
+    - [`kuusi-duplicate-routes`](#kuusi-duplicate-routes)
+    - [`kuusi-invalid-route-export`](#kuusi-invalid-route-export)
+    - [`kuusi-no-routes-directory`](#kuusi-no-routes-directory)
 - [Warnings](#warnings)
   - [`kuusi-ambiguous-url`](#kuusi-ambiguous-url)
 - [Configuration](#configuration)
   - [`routes`](#routes)
-    - [`path`](#path)
-    - [`warnAmbiguousRoutes`](#warnambiguousroutes)
+    - [`routes.directoryPath`](#routes-directorypath)
+    - [`routes.filePaths`](#routes-filepaths)
+    - [`routes.warnAmbiguousRoutes`](#routes-warnambiguousroutes)
   - [`dotenv`](#dotenv)
-    - [`path`](#path)
-    - [`templatePath`](#templatepath)
-    - [`export`](#export)
+    - [`dotenv.path`](#dotenv-path)
+    - [`dotenv.export`](#dotenv-export)
+    - [`dotenv.requiredKeys`](#dotenv-requiredkeys)
+    - [`dotenv.requiredPath`](#dotenv-requiredpath)
 
-# A Short Note
+## A Short Note
 
 This piece of documentation aims to not repeat what is already said in the JSDoc
 comments in the source code. If you suspect that some documentation may be
 missing, check that first before opening an issue.
 
-# Getting started
+## Getting started
 
 Getting started with kuusi is really easy. Here is a comprehensive guide.
 
-## Step 1: Install the package
+### Step 1: Install the package
 
 Installing kuusi can be done with this simple terminal command.
 
@@ -46,7 +51,7 @@ deno add jsr:@kuusi/kuusi;
 deno install;
 ```
 
-## Step 2: Make project structure
+### Step 2: Make project structure
 
 If you have completed step 1, it is time to set a general project structure.
 First, create a `src/` directory and in it, a file called `index.ts` or
@@ -97,7 +102,7 @@ would be `:id.source.ts`.
 Your app works like it should now (at least, I hope so, this isn't that
 complicated). All the steps from now on are optional, but might be worth a read.
 
-## Step 3: Configure kuusi
+### Step 3: Configure kuusi
 
 Kuusi can easily be configured by creating a `kuusi.config.ts` file in your
 projects **root**. In case you forgot, the projects root is where your
@@ -121,7 +126,7 @@ between your `kuusi.config.ts`, kuusi's `src/config.ts` and kuusi's `src/mod.ts`
 which all import each other in a closed loop. More on configuring kuusi can be
 found [here](#configuration).
 
-## Step 4: Make a webhook
+### Step 4: Make a webhook
 
 Kuusi provides a simple way to make webhooks. Instead of a route file ending in
 `.source.ts`, you can make it end with `.hook.ts` to make a webhook. A simple
@@ -187,17 +192,18 @@ Notice a couple of differences between a webhook and a websource:
    webhook and send data to all of its subscribers. This method can be used on
    other places to trigger the hook.
 
-# Errors
+## Errors
 
 Sometimes kuusi may tell you that your code sucks and give you an error
 alongside it, here is what they all mean.
 
-## kuusi-invalid-kuusi-config
+### Configuration Errors
+
+#### kuusi-invalid-kuusi-config
 
 ```ts
-// ~> `config.ts`.
 new Error(
-  "kuusi-invalid-kuusi-config: the exported kuusiConfig should be an instance of `KuusiConfig`",
+  "kuusi-invalid-kuusi-config: The exported kuusiConfig should be an instance of `KuusiConfig`.",
 );
 ```
 
@@ -206,10 +212,76 @@ the configuration you exported wasn't exported as default, because you used the
 wrong type for the configuration object or because you didn't use the
 constructor of the `KuusiConfig` class.
 
-## kuusi-no-routes-directory
+#### kuusi-invalid-route-config
 
 ```ts
-// ~> `config.ts`.
+new Error(
+  "kuusi-invalid-route-directory: The name of the routes directory is invalid.",
+);
+```
+
+Thrown when then name of the routes directory is not allowed.
+
+#### kuusi-no-kuusi-config
+
+```ts
+new Error(
+  "kuusi-no-kuusi-config: The configuration file does not provide a default export.",
+);
+```
+
+Thrown when a `kuusi.config.ts` file exists, but does not provide a default export. Check whether your configuration was exported correctly, or at all.
+
+### Dotenv Errors
+
+#### kuusi-missing-dotenv-key
+
+```ts
+new Error(
+  `kuusi-missing-dotenv-key: Missing required dotenv variable "${key}".`,
+);
+```
+
+Thrown when the dotenv file is missing the required `key` key.
+
+### Routing Errors
+
+#### kuusi-duplicate-routes
+
+```ts
+new Error(
+  `kuusi-duplicate-routes: The ${duplicate} URL is served multiple times.`,
+);
+```
+
+Thrown when one URL can trigger two differnt routes.
+
+##### Example
+
+`/kuusi/:id.source.ts` and `/kuusi/:notanid.hook.ts` share the same URL, because
+they both have the form of `/kuusi/[genericRoute]`. When a request is made with
+the URL `/kuusi/3`, it matches with both URL's which would be silly.
+
+#### kuusi-invalid-route-export
+
+```ts
+new Error(
+  `kuusi-invalid-route-export: The route file ${path} does not provide a valid default route export.`,
+);
+```
+
+Thrown when the file `path` does not provide a default `WebSource`, `WebHook` or `Route` export. This error could also mean that
+
+- the file does not export anything at all,
+- the file does not export the correct type of route:
+  - `WebSource` for `.source` files,
+  - `WebHook` for `.hook` files,
+  - and `Route` for routes outside the routes directory.
+- the file does not export the route as default (only applies to `.source` and `.hook` files in the routes directory).
+
+#### kuusi-no-routes-directory
+
+```ts
 new Error("kuusi-no-routes-directory: The routes directory does not exist.");
 ```
 
@@ -217,73 +289,11 @@ Thrown when the directory that should contain the routes does not exist. If you
 think that it does, check whether your routes directory's name contains a typo
 either in the configuration file or in your file systen.
 
-## kuusi-missing-dotenv-key
+## Warnings
 
-```ts
-// ~> `env.ts`
-new Error(`kuusi-missing-dotenv-key: Missing dotenv variable "${notFound}"`);
-```
+### Routing Warnings
 
-Thrown when the dotenv file is missing one or more required keys specified in
-the template dotenv file.
-
-## kuusi-no-route-export
-
-~> `mod.ts`
-
-```ts
-// ~> `mod.ts`
-new Error(
-  `kuusi-no-route-export: ${absolutePath} does not provide a default export`,
-);
-```
-
-Thrown when the file at `absolutePath` does not provide a default export.
-
-## kuusi-no-source-export
-
-```ts
-// ~> `mod.ts`
-new Error(
-  `kuusi-no-source-export: ${absolutePath} does not provide a websource export`,
-);
-```
-
-Thrown when the `.source.ts` file at `absolutePath` does not provide a (valid)
-websource export.
-
-## kuusi-no-hook-export
-
-```ts
-// ~> `mod.ts`
-new Error(
-  `kuusi-no-hook-export: ${absolutePath} does not provide a wehook export`,
-);
-```
-
-Thrown when the `.hook.ts` file at `absolutePath` does not provide a (valid)
-webhook export.
-
-## kuusi-duplicate-routes
-
-```ts
-// ~> `mod.ts`
-new Error(
-  `kuusi-duplicate-routes: The "${duplicate}" URL is served multiple times.`,
-);
-```
-
-Thrown when the URL's of the routes at `first` and `last` are the same.
-
-### Example
-
-`/kuusi/:id.source.ts` and `/kuusi/:notanid.hook.ts` share the same URL, because
-they both have the form of `/kuusi/[genericRoute]`. When a request is made with
-the URL `/kuusi/3`, it matches with both URL's which would be silly.
-
-# Warnings
-
-## kuusi-ambiguous-url
+#### kuusi-ambiguous-url
 
 ```ts
 // ~> `mod.ts`
@@ -295,7 +305,7 @@ console.warn(
 Thrown when at least two routes have very URL's that differ by only a trailing
 forwardslash.
 
-# Configuration
+## Configuration
 
 Kuusi can easily be configured by making a `kuusi.config.ts` file in your
 projects root. A basic configuration file could look something like this:
@@ -325,9 +335,9 @@ calling the `KuusiConfig` constructor. The class MUST be imported from
 `@kuusi/kuusi/types`, importing from `@kuusi/kuusi` will result in a cyclic
 importing deadlock.
 
-## routes
+### `routes`
 
-### path
+#### `routes.path` {#routes-path}
 
 ```ts
 const config = new KuusiConfig({
@@ -340,7 +350,7 @@ const config = new KuusiConfig({
 Configures the path to the directory that holds the routes. Defaults to
 `routes/`.
 
-### warnAmbiguousRoutes
+#### `routes.warnAmbiguousRoutes` {#routes-warnambiguousRoutes}
 
 ```ts
 const config = new KuusiConfig({
@@ -353,35 +363,9 @@ const config = new KuusiConfig({
 Configures whether a warning should be shown when two url's only differ by a
 trailing forwardslash.
 
-## dotenv
+### `dotenv`
 
-### path
-
-```ts
-const config = new KuusiConfig({
-  dotenv: {
-    path: ".env",
-  },
-});
-```
-
-Configures the path to the dotenv file that will be loaded. Defaults to `.env`.
-
-### templatePath
-
-```ts
-const config = new KuusiConfig({
-  dotenv: {
-    templatePath: "template.env",
-  },
-});
-```
-
-Configures the path to the template dotenv file that will be loaded. The
-template dotenv file contains all keys that the dotenv file must contain.
-Defaults to `template.env`.
-
-### export
+#### `dotenv.export` {#dotenv-export}
 
 ```ts
 const config = new KuusiConfig({
@@ -393,3 +377,41 @@ const config = new KuusiConfig({
 
 Configures whether the dotenv variables should also be included in the env
 variables. Defaults to `false`.
+
+#### `dotenv.path` {#dotenv-path}
+
+```ts
+const config = new KuusiConfig({
+  dotenv: {
+    path: ".env",
+  },
+});
+```
+
+Configures the path to the dotenv file that will be loaded. Defaults to `.env`.
+
+#### `dotenv.requiredKeys` {#dotenv-requiredkeys}
+
+```ts
+const config = new KuusiConfig({
+  dotenv: {
+    requiredKeys: [],
+  },
+});
+```
+
+An array containing keys that the dotenv file must have. Behaves exactly like a required dotenv file, but without the file.
+
+#### `dotenv.requiredPath` {#dotenv-requiredpath}
+
+```ts
+const config = new KuusiConfig({
+  dotenv: {
+    requiredPath: "required.env",
+  },
+});
+```
+
+Configures the path to the template dotenv file that will be loaded. The
+template dotenv file contains all keys that the dotenv file must contain.
+Defaults to `required.env`.

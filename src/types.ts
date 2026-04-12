@@ -10,7 +10,21 @@ import type { MaybePromise } from "./utils.ts";
  * Type that holds a URLPattern and either a `WebSource` or a `WebHook`. Used
  * to combine the path of a route with the route itself.
  */
-export type Route = [URLPattern, WebSource | WebHook];
+export class Route {
+  /**
+   * The `URLPattern` of this `Route`.
+   */
+  urlPattern: URLPattern;
+  /**
+   * The `WebSource` or `WebHook` that this `Route` serves.
+   */
+  route: WebSource | WebHook;
+
+  constructor(obj: Route) {
+    this.urlPattern = obj.urlPattern;
+    this.route = obj.route;
+  }
+}
 
 /**
  * Class that represents a kuusi WebSource.
@@ -31,10 +45,10 @@ export class WebSource {
   /** The method serving the DELETE method of this `WebSource`. */
   readonly DELETE?: WebSourceMethod;
   /** The method serving the OPTIONS method of this `WebSource`. */
-  readonly OPTIONS?: WebSourceMethod;
+  readonly OPTIONS?: WebSourceMethod = () =>
+    new Response(JSON.stringify(Object.keys(this)));
 
   constructor(obj: WebSource) {
-    this.OPTIONS = () => new Response(JSON.stringify(Object.entries(this)));
     Object.assign(this, obj);
   }
 }
@@ -73,39 +87,47 @@ export type WebHookTrigger = () => MaybePromise<void>;
 /** Interface holding the routes configuration options. */
 interface KuusiRoutesConfig {
   /**
-   * The path to the directory that holds the routes. Defaults to `routes/`.
+   * The path to the directory that holds the routes. Defaults to `routes/`. If
+   * set to `undefined`, the `kuusi-no-routes-directory` error won't be trown,
+   * allowing routing without a routes directory.
    */
-  path: string;
+  directoryPath: string | undefined;
   /**
    * Whether a warning should be shown when two url's only differ by a trailing
    * forwardslash.
    */
   warnAmbiguousRoutes: boolean;
+  /**
+   * The paths to files containing additional routes. Can be used for extra
+   * routes besides those in the routes directory, or as a replacement of it
+   * for extra project structure flexibility.
+   */
+  filePaths: string[];
 }
 
 /** Interface holding the dotenv and env options. */
 interface KuusiDotenvConfig {
-  /**
-   * The path to the dotenv file that will be loaded. Defaults to
-   * `template.env`.
-   */
-  path: string;
-  /**
-   * The path to the template dotenv file that will be loaded. The template
-   * dotenv file contains all keys that the dotenv file must contain. Defaults
-   * to `.env`.
-   */
-  templatePath: string;
   /**
    * Whether the dotenv variables should also be included in the env variables.
    * Defaults to `false`.
    */
   export: boolean;
   /**
+   * The path to the dotenv file that will be loaded. Defaults to
+   * `template.env`.
+   */
+  path: string;
+  /**
    * A string of required dotenv keys. Will neither override the required keys from
    * the template dotenv, nor get overridden by the template dotenv. Defaults to `[]`.
    */
   requiredKeys: string[];
+  /**
+   * The path to the template dotenv file that will be loaded. The template
+   * dotenv file contains all keys that the dotenv file must contain. Defaults
+   * to `.env`.
+   */
+  requiredPath: string;
 }
 
 /**
@@ -126,13 +148,14 @@ export interface PartialKuusiConfig {
 export class KuusiConfig {
   /** The route configuration options. */
   routes: KuusiRoutesConfig = {
-    path: "routes",
+    directoryPath: "routes",
     warnAmbiguousRoutes: true,
+    filePaths: [],
   };
   /** The dotenv configuration options. */
   dotenv: KuusiDotenvConfig = {
     path: ".env",
-    templatePath: "template.env",
+    requiredPath: "required.env",
     export: false,
     requiredKeys: [],
   };
