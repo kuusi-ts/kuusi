@@ -44,7 +44,7 @@ Deno.test({
       },
       dotenv: {
         path: ".env",
-        requiredPath: "template.env",
+        requiredPath: "required.env",
         export: false,
         requiredKeys: [],
       },
