@@ -16,7 +16,7 @@ do
 done
 
 echo "To get started, follow these steps";
-echo "  1. Cd into the directory with `cd kuusiApp`";
-echo "  2. Run `deno install`;
+echo "  1. Cd into the directory with \`cd kuusiApp\`";
+echo "  2. Run \`deno install\`";
 
 cd ../;
