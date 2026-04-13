@@ -11,8 +11,8 @@ declare -a arr=("deno.json" "kuusi.config.ts" "my.env" "myRequired.env" "customR
 
 for i in arr
 do 
-  touch i;
-  curl https://raw.githubusercontent.com/kuusi-ts/kuusi/refs/heads/main/example/"$i" >> i;
+  touch $i;
+  curl https://raw.githubusercontent.com/kuusi-ts/kuusi/refs/heads/main/example/$i >> $i;
 done
 
 deno install;
