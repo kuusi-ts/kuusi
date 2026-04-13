@@ -42,6 +42,12 @@ missing, check that first before opening an issue.
 
 Getting started with kuusi is really easy. You can either start from the example project in the `./example` directory, or follow this comprehensive guide.
 
+If you choose to start from the example project, run the following command:
+
+```bash
+curl https://raw.githubusercontent.com/kuusi-ts/kuusi/refs/heads/main/example/init.sh | bash
+```
+
 ### Step 1: Install the package
 
 Installing kuusi can be done with this simple terminal command.
@@ -339,12 +345,12 @@ importing deadlock.
 
 ### `routes`
 
-#### `routes.path` {#routes-path}
+#### `routes.directoryPath` {#routes-directorypath}
 
 ```ts
 const config = new KuusiConfig({
   routes: {
-    path: "routes/",
+    routdirectoryPathesDirPath: "routes/",
   },
 });
 ```
@@ -352,7 +358,19 @@ const config = new KuusiConfig({
 Configures the path to the directory that holds the routes. Defaults to
 `routes/`.
 
-#### `routes.warnAmbiguousRoutes` {#routes-warnambiguousRoutes}
+#### `routes.filePaths` {#routes-filepaths}
+
+```ts
+const config = new KuusiConfig({
+  routes: {
+    filePaths: [],
+  },
+});
+```
+
+Configures the paths to the files that hold extra routes for kuusi to load. Defaults to `[]`.
+
+#### `routes.warnAmbiguousRoutes` {#routes-warnambiguousroutes}
 
 ```ts
 const config = new KuusiConfig({
