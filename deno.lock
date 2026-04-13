@@ -41,6 +41,11 @@
           "jsr:@kuusi/kuusi@^1.1.0"
         ]
       },
+      "kuusiApp": {
+        "dependencies": [
+          "jsr:@kuusi/kuusi@^1.1.0"
+        ]
+      },
       "src": {
         "dependencies": [
           "jsr:@std/dotenv@~0.225.6",
