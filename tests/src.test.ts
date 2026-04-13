@@ -1,5 +1,4 @@
-import { assert, assertEquals } from "@std/assert";
-import { assertFalse } from "@std/assert/false";
+import { assert, assertEquals, assertFalse } from "@std/assert";
 import { parsePath, routeGuard } from "../src/utils.ts";
 import { KuusiConfig } from "@kuusi/kuusi/types";
 

@@ -18,7 +18,8 @@ const route = new WebHook({
   GET: (req: Request): Response =>
     new Response(
       JSON.stringify({
-        message: "hello",
+        message: "Kuusi natively supports WebHooks by calling the trigger method on a WebHook instance.",
+        url: "/3",
         request: req,
       }),
       {

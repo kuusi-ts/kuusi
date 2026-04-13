@@ -40,7 +40,7 @@ missing, check that first before opening an issue.
 
 ## Getting started
 
-Getting started with kuusi is really easy. Here is a comprehensive guide.
+Getting started with kuusi is really easy. You can either start from the example project in the `./example` directory, or follow this comprehensive guide.
 
 ### Step 1: Install the package
 
@@ -76,7 +76,7 @@ Now, similar to before, create a `routes` directory and create a
 ```ts
 import { WebSource } from "@kuusi/kuusi";
 
-export const route = new WebSource({
+const route = new WebSource({
   GET: (req, patternResult) => {
     return new Response(
       JSON.stringify({
@@ -91,6 +91,8 @@ export const route = new WebSource({
     );
   },
 });
+
+export default route;
 ```
 
 This defines a new endpoint at `/`, keep in mind index means its the default
@@ -124,7 +126,7 @@ Important: `KuusiConfig` **has** to be imported from `@kuusi/kuusi/types`,
 because importing it from `@kuusi/kuusi` results in a triple dependency cycle
 between your `kuusi.config.ts`, kuusi's `src/config.ts` and kuusi's `src/mod.ts`
 which all import each other in a closed loop. More on configuring kuusi can be
-found [here](#configuration).
+found [in the configuration section](#configuration).
 
 ### Step 4: Make a webhook
 

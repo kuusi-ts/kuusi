@@ -7,9 +7,9 @@ const config = new KuusiConfig({
     filePaths: ["src/extraRoute.ts"],
   },
   dotenv: {
-    path: "new.env",
+    path: "my.env",
     export: true,
-    requiredPath: "newTemplate.env",
+    requiredPath: "myRequired.env",
     requiredKeys: ["requiredKey"],
   },
 });

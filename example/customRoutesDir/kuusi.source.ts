@@ -6,7 +6,9 @@ const route = new WebSource({
 
     return new Response(
       JSON.stringify({
-        message: "Welcome to kuusi",
+        message:
+          "Kuusi also supports route parameters, try to add `?id=2` to this url.",
+        url: req.url.endsWith("/kuusi?id=2") ? "/subscribe" : "/kuusi?id=2",
         id: params.has("id") ? params.get("id") : undefined,
       }),
       {
