@@ -40,12 +40,13 @@ missing, check that first before opening an issue.
 
 ## Getting started
 
-Getting started with kuusi is really easy. You can either start from the example project in the `./example` directory, or follow this comprehensive guide.
+Getting started with kuusi is really easy. You can either start from the example
+project in the `./example` directory, or follow this comprehensive guide.
 
 If you choose to start from the example project, run the following command:
 
 ```bash
-curl https://raw.githubusercontent.com/kuusi-ts/kuusi/refs/heads/main/example/init.sh | bash
+deno run -Ar jsr:@kuusi/init kuusiApp
 ```
 
 ### Step 1: Install the package
@@ -238,7 +239,8 @@ new Error(
 );
 ```
 
-Thrown when a `kuusi.config.ts` file exists, but does not provide a default export. Check whether your configuration was exported correctly, or at all.
+Thrown when a `kuusi.config.ts` file exists, but does not provide a default
+export. Check whether your configuration was exported correctly, or at all.
 
 ### Dotenv Errors
 
@@ -278,14 +280,16 @@ new Error(
 );
 ```
 
-Thrown when the file `path` does not provide a default `WebSource`, `WebHook` or `Route` export. This error could also mean that
+Thrown when the file `path` does not provide a default `WebSource`, `WebHook` or
+`Route` export. This error could also mean that
 
 - the file does not export anything at all,
 - the file does not export the correct type of route:
   - `WebSource` for `.source` files,
   - `WebHook` for `.hook` files,
   - and `Route` for routes outside the routes directory.
-- the file does not export the route as default (only applies to `.source` and `.hook` files in the routes directory).
+- the file does not export the route as default (only applies to `.source` and
+  `.hook` files in the routes directory).
 
 #### kuusi-no-routes-directory
 
@@ -368,7 +372,8 @@ const config = new KuusiConfig({
 });
 ```
 
-Configures the paths to the files that hold extra routes for kuusi to load. Defaults to `[]`.
+Configures the paths to the files that hold extra routes for kuusi to load.
+Defaults to `[]`.
 
 #### `routes.warnAmbiguousRoutes` {#routes-warnambiguousroutes}
 
@@ -420,7 +425,8 @@ const config = new KuusiConfig({
 });
 ```
 
-An array containing keys that the dotenv file must have. Behaves exactly like a required dotenv file, but without the file.
+An array containing keys that the dotenv file must have. Behaves exactly like a
+required dotenv file, but without the file.
 
 #### `dotenv.requiredPath` {#dotenv-requiredpath}
 
