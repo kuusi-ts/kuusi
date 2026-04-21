@@ -18,7 +18,7 @@ export const httpVerbs: string[] = [
   "OPTIONS",
 ] as const;
 
-export const parsePath = (path: string) => {
+export function parsePath(path: string): string {
   // Removes the file extensions
   path = path.split(".").slice(0, -1).join(".");
 
@@ -32,7 +32,7 @@ export const parsePath = (path: string) => {
   if (Deno.build.os === "windows") path.replace(/\;/g, ";");
 
   return "/" + path;
-};
+}
 
 export const getDuplicate = <T>(array: T[]) =>
   array.filter((item, index) => array.indexOf(item) !== index);

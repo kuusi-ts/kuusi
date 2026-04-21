@@ -20,6 +20,8 @@ Or make a new project with the [init script](https://jsr.io/@kuusi/init)
 deno run -Ar jsr:@kuusi/init projectName
 ```
 
+Or check [the guide](https://github.com/kuusi-ts/kuusi/blob/main/docs/DOCUMENTATION.md#getting-started) for a detailed start.
+
 ## Featuring
 
 - Files based routing, with url arguments.
