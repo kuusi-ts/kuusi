@@ -14,48 +14,18 @@ A simple JavaScript / TypeScript framework for the backend using Deno.
 deno add jsr:@kuusi/kuusi
 ```
 
+Or make a new project with the [init script](https://jsr.io/@kuusi/init)
+
+```sh
+deno run -Ar jsr:@kuusi/init projectName
+```
+
 ## Featuring
 
 - Files based routing, with url arguments.
 - env and dotenv parsing.
 - Simple configuring with `kuusi.config.ts`.
 
-## Basic usage
-
-~> `routes/index.source.ts`
-
-```ts
-import { WebSource } from "@kuusi/kuusi";
-
-export const route = new WebSource({
-  GET: (req, patternResult) => {
-    return new Response(
-      JSON.stringify({
-        message: "welcome to kuusi!",
-      }),
-      {
-        status: 200,
-        headers: {
-          "content-type": "application/json; charset=utf-8",
-        },
-      },
-    );
-  },
-});
-```
-
-~> `src/index.ts`
-
-```ts
-import { getKuusiRoutes, kuusi } from "@kuusi/kuusi";
-
-const routes = await getKuusiRoutes();
-
-Deno.serve({ port: 1296 }, async (req) => {
-  return await kuusi(req, routes);
-});
-```
-
-# Misc
+## Misc
 
 - [Flavortown link](https://flavortown.hackclub.com/projects/10244)

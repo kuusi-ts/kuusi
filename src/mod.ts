@@ -23,7 +23,7 @@ import {
 export * from "./env.ts";
 export * from "./types.ts";
 
-const noRouteExport = (path: string): Error =>
+const noRouteExport = (path: string) =>
   new Error(
     `kuusi-invalid-route-export: The route file ${path} does not provide a valid default route export.`,
   );

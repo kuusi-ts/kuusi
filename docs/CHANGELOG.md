@@ -67,3 +67,7 @@
 
 - Replaced the curl to bash pipe init script with the `@kuusi/init` package on
   jsr.
+
+### `1.1.2`
+
+- Updated the README.md for flavortown
