@@ -142,7 +142,7 @@ export interface PartialKuusiConfig {
 }
 
 /**
- * Class for configuring Kuusi. Config has to be made by calling constructor,
+ * Class for configuring kuusi. Config has to be made by calling constructor,
  * won't work if it wasn't.
  */
 export class KuusiConfig {

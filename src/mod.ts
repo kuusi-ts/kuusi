@@ -73,18 +73,16 @@ export async function getKuusiRoutes(): Promise<Route[]> {
     }
   }
 
-  /* checkDuplicateRoutes */ {
-    const parsedURLs = routes.map(({ urlPattern }) =>
-      urlPattern.pathname.replace(/\/:[^\/]+(?!=\/)/g, "®")
+  const parsedURLs = routes.map(({ urlPattern }) =>
+    urlPattern.pathname.replace(/\/:[^\/]+(?!=\/)/g, "®")
+  );
+
+  const duplicate = getDuplicate(parsedURLs)[0];
+
+  if (duplicate) {
+    throw new Error(
+      `kuusi-duplicate-routes: The ${duplicate} URL is served multiple times.`,
     );
-
-    const duplicate = getDuplicate(parsedURLs)[0];
-
-    if (duplicate) {
-      throw new Error(
-        `kuusi-duplicate-routes: The ${duplicate} URL is served multiple times.`,
-      );
-    }
   }
 
   if (kuusiConfig.routes.warnAmbiguousRoutes) {
